@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>PH Korea 2026 · Document Submission</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", sans-serif;
+      background: #F2F2F7;
+      min-height: 100vh;
+    }
+    .wrap { max-width: 430px; margin: 0 auto; padding-bottom: 48px; }
+
+    /* ── top bar ── */
+    .top-bar {
+      background: #1B3A5C;
+      color: #fff;
+      text-align: center;
+      padding: 14px 16px;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      border-radius: 0 0 14px 14px;
+      margin: 0 16px;
+    }
+
+    /* ── lang toggle ── */
+    .lang-wrap {
+      display: flex;
+      margin: 12px 16px 0;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1.5px solid #E5E5EA;
+      background: #fff;
+    }
+    .lang-btn {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      background: #fff;
+      color: #636366;
+      transition: all .2s;
+    }
+    .lang-btn.active {
+      background: #1B3A5C;
+      color: #fff;
+    }
+
+    /* ── card ── */
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px 16px;
+      margin: 12px 16px 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .card-title { font-size: 17px; font-weight: 700; color: #1C1C1E; margin-bottom: 8px; }
+    .card-sub { font-size: 13px; color: #636366; line-height: 1.6; margin-bottom: 20px; }
+
+    /* ── progress bar ── */
+    .progress-wrap {
+      background: #fff;
+      border-radius: 16px;
+      padding: 16px;
+      margin: 12px 16px 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .progress-label { font-size: 13px; color: #636366; margin-bottom: 8px; }
+    .progress-bar {
+      height: 8px;
+      background: #E5E5EA;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #34C759;
+      border-radius: 4px;
+      transition: width .4s ease;
+    }
+    .progress-count { font-size: 13px; color: #1C1C1E; font-weight: 600; margin-top: 6px; }
+
+    /* ── form ── */
+    .field-label { font-size: 13px; color: #8E8E93; display: block; margin-bottom: 6px; }
+    input[type=email] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #E5E5EA;
+      border-radius: 10px;
+      font-size: 16px;
+      color: #1C1C1E;
+      outline: none;
+      transition: border-color .2s;
+    }
+    input[type=email]:focus { border-color: #1B3A5C; }
+
+    /* ── file box ── */
+    .file-row { margin-bottom: 14px; }
+    .file-box {
+      border: 2px dashed #E5E5EA;
+      border-radius: 12px;
+      padding: 18px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+    .file-box:hover { border-color: #1B3A5C; }
+    .file-box.has-file { border-color: #34C759; background: #F0FFF4; }
+    .file-box.has-prev { border-color: #007AFF; background: #F0F4FF; }
+    .file-box .fi { font-size: 26px; margin-bottom: 6px; }
+    .file-box .fl { font-size: 14px; font-weight: 600; color: #1B3A5C; }
+    .file-box.has-file .fl { color: #34C759; }
+    .file-box.has-prev .fl { color: #007AFF; }
+    .file-box .fh { font-size: 12px; color: #8E8E93; margin-top: 3px; }
+    .file-box .fn {
+      font-size: 12px; color: #1C1C1E; margin-top: 6px; font-weight: 500;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 8px;
+    }
+    .file-box .prev-info {
+      font-size: 11px; color: #007AFF; margin-top: 4px;
+    }
+    .file-box input[type=file] { display: none; }
+
+    /* ── event check ── */
+    .event-section { margin-top: 20px; }
+    .event-row {
+      display: flex;
+      align-items: flex-start;
+      padding: 14px 0;
+      border-bottom: 1px solid #F2F2F7;
+    }
+    .event-row:last-child { border-bottom: none; }
+    .event-check {
+      width: 22px; height: 22px;
+      border: 2px solid #C7C7CC;
+      border-radius: 6px;
+      margin-right: 12px;
+      flex-shrink: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .2s;
+      margin-top: 2px;
+    }
+    .event-check.checked {
+      background: #1B3A5C;
+      border-color: #1B3A5C;
+    }
+    .event-check.checked::after {
+      content: '';
+      width: 6px; height: 10px;
+      border: solid #fff;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+      margin-top: -2px;
+    }
+    .event-info { flex: 1; }
+    .event-name { font-size: 15px; font-weight: 600; color: #1C1C1E; }
+    .event-detail { font-size: 12px; color: #8E8E93; margin-top: 2px; }
+
+    /* ── button ── */
+    .btn {
+      display: block;
+      width: calc(100% - 32px);
+      margin: 16px 16px 0;
+      padding: 16px;
+      background: #1B3A5C;
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      letter-spacing: -0.3px;
+      transition: opacity .2s;
+    }
+    .btn:active { opacity: .8; }
+    .btn:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* ── result screens ── */
+    .result-wrap {
+      text-align: center;
+      padding: 48px 24px 24px;
+      margin: 12px 16px 0;
+    }
+    .result-icon { font-size: 60px; margin-bottom: 16px; }
+    .result-title { font-size: 21px; font-weight: 800; color: #1C1C1E; margin-bottom: 10px; }
+    .result-msg { font-size: 15px; color: #636366; line-height: 1.65; }
+    .result-msg a { color: #1B3A5C; text-decoration: none; }
+
+    /* ── overlay / spinner ── */
+    .overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.4); z-index: 100;
+      align-items: center; justify-content: center;
+    }
+    .overlay.show { display: flex; }
+    .spinner {
+      width: 44px; height: 44px;
+      border: 4px solid rgba(255,255,255,.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── toast ── */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #1C1C1E; color: #fff;
+      padding: 12px 20px; border-radius: 20px;
+      font-size: 14px; opacity: 0;
+      transition: all .3s; pointer-events: none;
+      white-space: nowrap; z-index: 200;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar" id="top-bar">PH Korea 2026</div>
+
+  <!-- 언어 전환 -->
+  <div class="lang-wrap">
+    <button class="lang-btn active" id="lang-ko" onclick="setLang('ko')">한국어</button>
+    <button class="lang-btn" id="lang-en" onclick="setLang('en')">English</button>
+  </div>
+
+  <div id="app"></div>
+</div>
+<div id="overlay" class="overlay"><div class="spinner"></div></div>
+<div id="toast" class="toast"></div>
+
+<script>
+// ── GAS URL (배포 후 교체) ──
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxRchDd8B7rK-hCiny0wbCEdTmTlvlHRdr2rDftR0ARh7JnpKvBVW9y_SvleqKI3on8eg/exec";
+
+// ── 다국어 텍스트 ──
+const L = {
+  ko: {
+    topBar: 'PH Korea 2026 · 자료 제출',
+    verifyTitle: '본인 확인',
+    verifySub: '등록된 이메일 주소를 입력해주세요.',
+    emailLabel: '이메일 주소',
+    emailPlaceholder: 'example@email.com',
+    verifyBtn: '확인하기',
+    invalidEmail: '올바른 이메일 주소를 입력해주세요',
+    uploadTitle: '님, 환영합니다!',
+    uploadSub: '아래 항목을 제출해주세요.',
+    fileAccept: '지원 형식',
+    fileMax: '최대',
+    fileSelect: '파일 선택',
+    fileSelected: '새 파일 선택됨',
+    filePrev: '제출됨',
+    fileReplace: '클릭하여 새 파일 추가',
+    abstractLabel: '초록 (Abstract)',
+    abstractHint: 'PDF, DOC, DOCX',
+    cvLabel: 'CV / 이력서',
+    cvHint: 'PDF, DOC, DOCX',
+    passportLabel: '여권 사본',
+    passportHint: 'JPG, PNG, PDF',
+    eventTitle: '사교행사 참석 여부',
+    submitBtn: '제출하기',
+    progressLabel: '제출 현황',
+    progressCount: '개 항목 중 {done}개 제출 완료',
+    doneTitle: '제출 완료',
+    doneMsg: '자료가 성공적으로 제출되었습니다.\n추가 안내사항은 이메일로 안내드리겠습니다.',
+    closedTitle: '제출 마감',
+    closedMsg: '자료 제출 기간이 마감되었습니다.\n문의사항은 아래로 연락해주세요.',
+    errorTitle: '접속 불가',
+    errorMsg: '등록되지 않은 이메일입니다.\n이메일을 다시 확인하시거나 사무국으로 문의해주세요.',
+    retryBtn: '이메일 다시 입력',
+    contactEmail: 'info.kphs@gmail.com',
+    toastError: '오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+    toastFileTooLarge: '파일 크기가 너무 큽니다',
+    toastNoFile: '파일을 하나 이상 제출하거나 사교행사 응답을 변경해주세요',
+  },
+  en: {
+    topBar: 'PH Korea 2026 · Document Submission',
+    verifyTitle: 'Verify Your Email',
+    verifySub: 'Please enter your registered email address.',
+    emailLabel: 'Email Address',
+    emailPlaceholder: 'example@email.com',
+    verifyBtn: 'Verify',
+    invalidEmail: 'Please enter a valid email address',
+    uploadTitle: ', welcome!',
+    uploadSub: 'Please submit the following documents.',
+    fileAccept: 'Accepted formats',
+    fileMax: 'Max',
+    fileSelect: 'Choose File',
+    fileSelected: 'New file selected',
+    filePrev: 'Submitted',
+    fileReplace: 'Click to add a new file',
+    abstractLabel: 'Abstract',
+    abstractHint: 'PDF, DOC, DOCX',
+    cvLabel: 'CV',
+    cvHint: 'PDF, DOC, DOCX',
+    passportLabel: 'Passport Copy',
+    passportHint: 'JPG, PNG, PDF',
+    eventTitle: 'Social Event Attendance',
+    submitBtn: 'Submit',
+    progressLabel: 'Submission Progress',
+    progressCount: '{done} of {total} items submitted',
+    doneTitle: 'Submission Complete',
+    doneMsg: 'Your documents have been submitted successfully.\nWe will send further instructions via email.',
+    closedTitle: 'Submission Closed',
+    closedMsg: 'The submission period has ended.\nPlease contact us for any inquiries.',
+    errorTitle: 'Access Denied',
+    errorMsg: 'This email is not registered.\nPlease check your email or contact the secretariat.',
+    retryBtn: 'Try Another Email',
+    contactEmail: 'info.kphs@gmail.com',
+    toastError: 'An error occurred. Please try again later.',
+    toastFileTooLarge: 'File size is too large',
+    toastNoFile: 'Please submit at least one file or change event attendance',
+  }
+};
+
+// ── 파일 항목 정의 ──
+const FILE_ITEMS = {
+  abstract: { icon: '\uD83D\uDCC4', accept: '.pdf,.doc,.docx', maxMB: 10 },
+  cv:       { icon: '\uD83D\uDCCB', accept: '.pdf,.doc,.docx', maxMB: 10 },
+  passport: { icon: '\uD83D\uDEC2', accept: '.jpg,.jpeg,.png,.pdf', maxMB: 4 },
+};
+
+// ── 상태 ──
+let lang = 'ko';
+let S = {
+  view: 'verify',
+  email: '',
+  name: '',
+  affiliation: '',
+  required: {},
+  submitted: {},
+  socialEvents: [],
+  files: {},        // { abstract: File, cv: File, ... }
+  eventChecks: {},  // { welcome: true, ... }
+};
+
+// ── 유틸 ──
+const g = id => document.getElementById(id);
+const t = key => L[lang][key] || key;
+
+function showOverlay(on) { g('overlay').classList.toggle('show', on); }
+function showToast(msg) {
+  const el = g('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+function setLang(l) {
+  lang = l;
+  g('lang-ko').classList.toggle('active', l === 'ko');
+  g('lang-en').classList.toggle('active', l === 'en');
+  g('top-bar').textContent = t('topBar');
+  render();
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload  = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// ── 진행률 계산 ──
+function calcProgress() {
+  const fileKeys = Object.keys(S.required).filter(k => S.required[k]);
+  const done = fileKeys.filter(k => S.submitted[k] || S.files[k]).length;
+  return { total: fileKeys.length, done };
+}
+
+// ── 렌더링 ──
+function render() {
+  const app = g('app');
+
+  if (S.view === 'verify') {
+    app.innerHTML = `
+      <div class="card">
+        <div class="card-title">${t('verifyTitle')}</div>
+        <div class="card-sub">${t('verifySub')}</div>
+        <label class="field-label">${t('emailLabel')}</label>
+        <input type="email" id="email-input" placeholder="${t('emailPlaceholder')}" autocomplete="email">
+      </div>
+      <button class="btn" id="verify-btn">${t('verifyBtn')}</button>
+    `;
+    bindVerify();
+  }
+
+  else if (S.view === 'upload') {
+    const { total, done } = calcProgress();
+    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+    const progressText = lang === 'ko'
+      ? `${total}${t('progressCount').replace('{done}', done)}`
+      : t('progressCount').replace('{done}', done).replace('{total}', total);
+
+    // 파일 업로드 항목 생성
+    let fileHTML = '';
+    for (const [key, cfg] of Object.entries(FILE_ITEMS)) {
+      if (!S.required[key]) continue;
+      const sub = S.submitted[key];
+      const newFile = S.files[key];
+      const hasPrev = sub && sub.name;
+      const hasNew = !!newFile;
+
+      let boxClass = 'file-box';
+      let labelText = t('fileSelect');
+      let nameText = '';
+      let prevHTML = '';
+
+      if (hasNew) {
+        boxClass += ' has-file';
+        labelText = t('fileSelected');
+        nameText = newFile.name;
+        if (hasPrev) {
+          prevHTML = `<div class="prev-info">${t('filePrev')}: ${sub.name} (${sub.date})</div>`;
+        }
+      } else if (hasPrev) {
+        boxClass += ' has-prev';
+        labelText = `${t('filePrev')} (${sub.date})`;
+        nameText = sub.name;
+        prevHTML = `<div class="prev-info">${t('fileReplace')}</div>`;
+      }
+
+      fileHTML += `
+        <div class="file-row">
+          <label class="field-label">${t(key + 'Label')}</label>
+          <div class="${boxClass}" id="${key}-box" onclick="g('${key}-input').click()">
+            <div class="fi">${cfg.icon}</div>
+            <div class="fl" id="${key}-label">${labelText}</div>
+            <div class="fh">${t(key + 'Hint')} · ${t('fileMax')} ${cfg.maxMB}MB</div>
+            <div class="fn" id="${key}-name">${nameText}</div>
+            ${prevHTML}
+            <input type="file" id="${key}-input" accept="${cfg.accept}">
+          </div>
+        </div>
+      `;
+    }
+
+    // 사교행사 항목 생성
+    let eventHTML = '';
+    const enabledEvents = S.socialEvents.filter(ev => ev.enabled);
+    if (enabledEvents.length > 0) {
+      eventHTML = `
+        <div class="event-section">
+          <div class="card-title">${t('eventTitle')}</div>
+          <div style="margin-top: 8px;">
+      `;
+      for (const ev of enabledEvents) {
+        const checked = S.eventChecks[ev.id] ? 'checked' : '';
+        const evName = lang === 'ko' ? ev.name_ko : ev.name_en;
+        const evVenue = lang === 'ko' ? ev.venue_ko : ev.venue_en;
+        eventHTML += `
+          <div class="event-row">
+            <div class="event-check ${checked}" id="evck-${ev.id}" onclick="toggleEvent('${ev.id}')"></div>
+            <div class="event-info">
+              <div class="event-name">${evName}</div>
+              <div class="event-detail">${ev.date}${evVenue ? ' · ' + evVenue : ''}</div>
+            </div>
+          </div>
+        `;
+      }
+      eventHTML += '</div></div>';
+    }
+
+    app.innerHTML = `
+      <div class="progress-wrap">
+        <div class="progress-label">${t('progressLabel')}</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+        <div class="progress-count">${progressText}</div>
+      </div>
+      <div class="card">
+        <div class="card-title">${S.name}${t('uploadTitle')}</div>
+        <div class="card-sub">${t('uploadSub')}</div>
+        ${fileHTML}
+        ${eventHTML}
+      </div>
+      <button class="btn" id="submit-btn">${t('submitBtn')}</button>
+    `;
+    bindUpload();
+  }
+
+  else if (S.view === 'done') {
+    app.innerHTML = `
+      <div class="result-wrap">
+        <div class="result-icon">\u2705</div>
+        <div class="result-title">${t('doneTitle')}</div>
+        <div class="result-msg">${t('doneMsg').replace(/\n/g, '<br>')}</div>
+      </div>
+      <button class="btn" onclick="reloadForm()">${lang === 'ko' ? '돌아가기' : 'Go Back'}</button>
+    `;
+  }
+
+  else if (S.view === 'closed') {
+    app.innerHTML = `
+      <div class="result-wrap">
+        <div class="result-icon">\u23F0</div>
+        <div class="result-title">${t('closedTitle')}</div>
+        <div class="result-msg">
+          ${t('closedMsg').replace(/\n/g, '<br>')}<br><br>
+          <a href="mailto:${t('contactEmail')}">\uD83D\uDCE7 ${t('contactEmail')}</a>
+        </div>
+      </div>
+    `;
+  }
+
+  else if (S.view === 'error') {
+    app.innerHTML = `
+      <div class="result-wrap">
+        <div class="result-icon">\u274C</div>
+        <div class="result-title">${t('errorTitle')}</div>
+        <div class="result-msg">
+          ${t('errorMsg').replace(/\n/g, '<br>')}<br><br>
+          <a href="mailto:${t('contactEmail')}">\uD83D\uDCE7 ${t('contactEmail')}</a>
+        </div>
+      </div>
+      <button class="btn" onclick="goBack()">${t('retryBtn')}</button>
+    `;
+  }
+}
+
+// ── 사교행사 체크 토글 ──
+function toggleEvent(id) {
+  S.eventChecks[id] = !S.eventChecks[id];
+  const el = g('evck-' + id);
+  if (el) el.classList.toggle('checked', S.eventChecks[id]);
+}
+
+// ── 뒤로가기 ──
+function goBack() {
+  S.email = '';
+  S.view = 'verify';
+  render();
+}
+
+// ── 제출 후 다시 폼으로 ──
+function reloadForm() {
+  S.files = {};
+  S.view = 'verify';
+  render();
+}
+
+// ── 이메일 확인 ──
+function bindVerify() {
+  const input = g('email-input');
+  const btn   = g('verify-btn');
+
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') btn.click(); });
+
+  btn.addEventListener('click', async () => {
+    const email = input.value.trim();
+    if (!email || !email.includes('@')) {
+      showToast(t('invalidEmail'));
+      return;
+    }
+    S.email = email;
+    showOverlay(true);
+
+    try {
+      const res  = await fetch(`${GAS_URL}?action=checkEmail&email=${encodeURIComponent(email)}`);
+      const json = await res.json();
+      showOverlay(false);
+
+      if (json.status === 'ok') {
+        S.name        = json.name || '';
+        S.affiliation = json.affiliation || '';
+        S.required    = json.required || {};
+        S.submitted   = json.submitted || {};
+        S.socialEvents = json.socialEvents || [];
+        S.files       = {};
+        S.eventChecks = {};
+        // 기존 사교행사 체크 상태 반영
+        for (const ev of S.socialEvents) {
+          if (ev.attending) S.eventChecks[ev.id] = true;
+        }
+        S.view = 'upload';
+      } else if (json.status === 'closed') {
+        S.view = 'closed';
+      } else {
+        S.view = 'error';
+      }
+      render();
+    } catch (err) {
+      showOverlay(false);
+      showToast(t('toastError'));
+    }
+  });
+}
+
+// ── 파일 업로드 바인딩 ──
+function bindUpload() {
+  for (const [key, cfg] of Object.entries(FILE_ITEMS)) {
+    if (!S.required[key]) continue;
+    const inputEl = g(key + '-input');
+    if (!inputEl) continue;
+
+    inputEl.addEventListener('change', function () {
+      const file = this.files[0];
+      if (!file) return;
+      if (file.size > cfg.maxMB * 1024 * 1024) {
+        showToast(`${t('toastFileTooLarge')} (${t('fileMax')} ${cfg.maxMB}MB)`);
+        this.value = '';
+        return;
+      }
+      S.files[key] = file;
+      // UI 즉시 업데이트
+      const box = g(key + '-box');
+      const label = g(key + '-label');
+      const nameEl = g(key + '-name');
+      if (box) { box.className = 'file-box has-file'; }
+      if (label) { label.textContent = t('fileSelected'); }
+      if (nameEl) { nameEl.textContent = file.name; }
+      // 진행률 업데이트
+      updateProgress();
+    });
+  }
+
+  g('submit-btn').addEventListener('click', submitForm);
+}
+
+function updateProgress() {
+  const { total, done } = calcProgress();
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  const fill = document.querySelector('.progress-fill');
+  const count = document.querySelector('.progress-count');
+  if (fill) fill.style.width = pct + '%';
+  if (count) {
+    count.textContent = lang === 'ko'
+      ? `${total}${t('progressCount').replace('{done}', done)}`
+      : t('progressCount').replace('{done}', done).replace('{total}', total);
+  }
+}
+
+// ── 제출 ──
+async function submitForm() {
+  const hasNewFiles = Object.keys(S.files).length > 0;
+  // 사교행사 변경 여부 확인
+  let eventChanged = false;
+  for (const ev of S.socialEvents) {
+    if (ev.enabled) {
+      const prev = !!ev.attending;
+      const curr = !!S.eventChecks[ev.id];
+      if (prev !== curr) { eventChanged = true; break; }
+    }
+  }
+
+  if (!hasNewFiles && !eventChanged) {
+    showToast(t('toastNoFile'));
+    return;
+  }
+
+  showOverlay(true);
+  try {
+    // 파일 → base64 변환
+    const filePayloads = {};
+    for (const [key, file] of Object.entries(S.files)) {
+      const b64 = await fileToBase64(file);
+      filePayloads[key] = { name: file.name, type: file.type, data: b64 };
+    }
+
+    const payload = {
+      email: S.email,
+      name: S.name,
+      files: filePayloads,
+      events: S.eventChecks,
+    };
+
+    await fetch(GAS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(payload)
+    });
+
+    showOverlay(false);
+    S.view = 'done';
+    render();
+  } catch (err) {
+    showOverlay(false);
+    showToast(t('toastError'));
+  }
+}
+
+render();
+</script>
+</body>
+</html>
