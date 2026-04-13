@@ -47,10 +47,7 @@
       color: #636366;
       transition: all .2s;
     }
-    .lang-btn.active {
-      background: #1B3A5C;
-      color: #fff;
-    }
+    .lang-btn.active { background: #1B3A5C; color: #fff; }
 
     /* ── card ── */
     .card {
@@ -63,32 +60,32 @@
     .card-title { font-size: 17px; font-weight: 700; color: #1C1C1E; margin-bottom: 8px; }
     .card-sub { font-size: 13px; color: #636366; line-height: 1.6; margin-bottom: 20px; }
 
-    /* ── progress bar ── */
-    .progress-wrap {
-      background: #fff;
-      border-radius: 16px;
-      padding: 16px;
-      margin: 12px 16px 0;
-      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    /* ── step indicator ── */
+    .step-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 14px 16px 4px;
     }
-    .progress-label { font-size: 13px; color: #636366; margin-bottom: 8px; }
-    .progress-bar {
-      height: 8px;
+    .step-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
       background: #E5E5EA;
-      border-radius: 4px;
-      overflow: hidden;
+      transition: all .3s;
     }
-    .progress-fill {
-      height: 100%;
-      background: #34C759;
-      border-radius: 4px;
-      transition: width .4s ease;
+    .step-dot.active { background: #1B3A5C; width: 24px; border-radius: 4px; }
+    .step-dot.done { background: #34C759; }
+    .step-label {
+      font-size: 12px; color: #8E8E93;
+      text-align: center;
+      padding: 4px 16px 0;
     }
-    .progress-count { font-size: 13px; color: #1C1C1E; font-weight: 600; margin-top: 6px; }
 
-    /* ── form ── */
-    .field-label { font-size: 13px; color: #8E8E93; display: block; margin-bottom: 6px; }
-    input[type=email] {
+    /* ── form fields ── */
+    .field-label { font-size: 13px; color: #8E8E93; display: block; margin-bottom: 6px; margin-top: 14px; }
+    .field-label .req { color: #FF3B30; }
+    .field-input, .field-select, .field-textarea {
       width: 100%;
       padding: 12px 14px;
       border: 1.5px solid #E5E5EA;
@@ -97,8 +94,45 @@
       color: #1C1C1E;
       outline: none;
       transition: border-color .2s;
+      background: #fff;
+      font-family: inherit;
     }
-    input[type=email]:focus { border-color: #1B3A5C; }
+    .field-input:focus, .field-select:focus, .field-textarea:focus { border-color: #1B3A5C; }
+    .field-textarea { resize: vertical; min-height: 80px; }
+    .field-row { display: flex; gap: 10px; }
+    .field-row > * { flex: 1; }
+    .field-hint { font-size: 11px; color: #8E8E93; margin-top: 4px; }
+
+    /* ── radio / checkbox group ── */
+    .radio-group, .check-group { display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
+    .radio-item, .check-item {
+      padding: 10px 16px;
+      border: 1.5px solid #E5E5EA;
+      border-radius: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all .2s;
+      user-select: none;
+    }
+    .radio-item.sel, .check-item.sel { border-color: #1B3A5C; background: #EDF1F7; color: #1B3A5C; font-weight: 600; }
+
+    /* ── date picker ── */
+    .date-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 6px; margin-top: 8px; }
+    .date-cell {
+      padding: 10px 4px;
+      text-align: center;
+      border: 1.5px solid #E5E5EA;
+      border-radius: 10px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all .2s;
+      user-select: none;
+    }
+    .date-cell:hover { border-color: #1B3A5C; }
+    .date-cell.sel { border-color: #1B3A5C; background: #1B3A5C; color: #fff; }
+    .date-cell.disabled { opacity: .3; pointer-events: none; }
+    .date-cell .dw { font-size: 10px; color: #8E8E93; }
+    .date-cell.sel .dw { color: rgba(255,255,255,.7); }
 
     /* ── file box ── */
     .file-row { margin-bottom: 14px; }
@@ -118,58 +152,28 @@
     .file-box.has-file .fl { color: #34C759; }
     .file-box.has-prev .fl { color: #007AFF; }
     .file-box .fh { font-size: 12px; color: #8E8E93; margin-top: 3px; }
-    .file-box .fn {
-      font-size: 12px; color: #1C1C1E; margin-top: 6px; font-weight: 500;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 8px;
-    }
-    .file-box .prev-info {
-      font-size: 11px; color: #007AFF; margin-top: 4px;
-    }
+    .file-box .fn { font-size: 12px; color: #1C1C1E; margin-top: 6px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 8px; }
+    .file-box .prev-info { font-size: 11px; color: #007AFF; margin-top: 4px; }
     .file-box input[type=file] { display: none; }
 
     /* ── event check ── */
-    .event-section { margin-top: 20px; }
-    .event-row {
-      display: flex;
-      align-items: flex-start;
-      padding: 14px 0;
-      border-bottom: 1px solid #F2F2F7;
-    }
+    .event-row { display: flex; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid #F2F2F7; }
     .event-row:last-child { border-bottom: none; }
     .event-check {
-      width: 22px; height: 22px;
-      border: 2px solid #C7C7CC;
-      border-radius: 6px;
-      margin-right: 12px;
-      flex-shrink: 0;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all .2s;
-      margin-top: 2px;
+      width: 22px; height: 22px; border: 2px solid #C7C7CC; border-radius: 6px; margin-right: 12px;
+      flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all .2s; margin-top: 2px;
     }
-    .event-check.checked {
-      background: #1B3A5C;
-      border-color: #1B3A5C;
-    }
-    .event-check.checked::after {
-      content: '';
-      width: 6px; height: 10px;
-      border: solid #fff;
-      border-width: 0 2px 2px 0;
-      transform: rotate(45deg);
-      margin-top: -2px;
-    }
+    .event-check.checked { background: #1B3A5C; border-color: #1B3A5C; }
+    .event-check.checked::after { content: ''; width: 6px; height: 10px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); margin-top: -2px; }
     .event-info { flex: 1; }
     .event-name { font-size: 15px; font-weight: 600; color: #1C1C1E; }
     .event-detail { font-size: 12px; color: #8E8E93; margin-top: 2px; }
 
-    /* ── button ── */
+    /* ── buttons ── */
+    .btn-row { display: flex; gap: 10px; margin: 16px 16px 0; }
     .btn {
-      display: block;
-      width: calc(100% - 32px);
-      margin: 16px 16px 0;
+      flex: 1;
       padding: 16px;
       background: #1B3A5C;
       color: #fff;
@@ -184,44 +188,53 @@
     }
     .btn:active { opacity: .8; }
     .btn:disabled { opacity: .4; cursor: not-allowed; }
-
-    /* ── result screens ── */
-    .result-wrap {
+    .btn-back {
+      flex: 0 0 auto;
+      width: 56px;
+      padding: 16px 0;
+      background: #E5E5EA;
+      color: #636366;
+      border: none;
+      border-radius: 14px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
       text-align: center;
-      padding: 48px 24px 24px;
-      margin: 12px 16px 0;
     }
+
+    /* ── result ── */
+    .result-wrap { text-align: center; padding: 48px 24px 24px; margin: 12px 16px 0; }
     .result-icon { font-size: 60px; margin-bottom: 16px; }
     .result-title { font-size: 21px; font-weight: 800; color: #1C1C1E; margin-bottom: 10px; }
     .result-msg { font-size: 15px; color: #636366; line-height: 1.65; }
     .result-msg a { color: #1B3A5C; text-decoration: none; }
 
-    /* ── overlay / spinner ── */
-    .overlay {
+    /* ── popup ── */
+    .popup-overlay {
       display: none; position: fixed; inset: 0;
       background: rgba(0,0,0,.4); z-index: 100;
       align-items: center; justify-content: center;
     }
-    .overlay.show { display: flex; }
-    .spinner {
-      width: 44px; height: 44px;
-      border: 4px solid rgba(255,255,255,.3);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin .8s linear infinite;
+    .popup-overlay.show { display: flex; }
+    .popup-box {
+      background: #fff; border-radius: 16px; padding: 24px 20px;
+      max-width: 320px; width: 90%; text-align: center;
     }
+    .popup-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .popup-msg { font-size: 14px; color: #636366; line-height: 1.6; margin-bottom: 16px; }
+    .popup-btn {
+      padding: 12px 24px; background: #1B3A5C; color: #fff;
+      border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer;
+    }
+
+    /* ── overlay / spinner ── */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 100; align-items: center; justify-content: center; }
+    .overlay.show { display: flex; }
+    .spinner { width: 44px; height: 44px; border: 4px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ── toast ── */
-    .toast {
-      position: fixed; bottom: 24px; left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: #1C1C1E; color: #fff;
-      padding: 12px 20px; border-radius: 20px;
-      font-size: 14px; opacity: 0;
-      transition: all .3s; pointer-events: none;
-      white-space: nowrap; z-index: 200;
-    }
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #1C1C1E; color: #fff; padding: 12px 20px; border-radius: 20px; font-size: 14px; opacity: 0; transition: all .3s; pointer-events: none; white-space: nowrap; z-index: 200; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
@@ -235,463 +248,698 @@
     <button class="lang-btn" id="lang-en" onclick="setLang('en')">English</button>
   </div>
 
+  <div id="step-bar-wrap"></div>
   <div id="app"></div>
 </div>
 <div id="overlay" class="overlay"><div class="spinner"></div></div>
 <div id="toast" class="toast"></div>
+<div id="popup" class="popup-overlay">
+  <div class="popup-box">
+    <div class="popup-title" id="popup-title"></div>
+    <div class="popup-msg" id="popup-msg"></div>
+    <button class="popup-btn" onclick="closePopup()">OK</button>
+  </div>
+</div>
 
 <script>
 // ── GAS URL (배포 후 교체) ──
-const GAS_URL = "https://script.google.com/macros/s/AKfycbxRchDd8B7rK-hCiny0wbCEdTmTlvlHRdr2rDftR0ARh7JnpKvBVW9y_SvleqKI3on8eg/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxDcTi1zG65jDI0jfq0g8Hu_oFTUN-8l6fqf6vQEWjsFBbL_h53TfjKbzwYlYV64Q/exec";
 
-// ── 다국어 텍스트 ──
+// ── 스텝 정의 ──
+const STEPS = ["verify","dashboard","personal","accommodation","dietary","introduction","cv","files","events","done"];
+const STEP_NAMES = {
+  ko: ["확인","대시보드","인적정보","숙박","식이","소개","CV","파일","행사","완료"],
+  en: ["Verify","Dashboard","Info","Stay","Diet","Intro","CV","Files","Events","Done"]
+};
+
+// ── 다국어 ──
 const L = {
   ko: {
     topBar: 'PH Korea 2026 · 자료 제출',
-    verifyTitle: '본인 확인',
-    verifySub: '등록된 이메일 주소를 입력해주세요.',
-    emailLabel: '이메일 주소',
-    emailPlaceholder: 'example@email.com',
-    verifyBtn: '확인하기',
+    verifyTitle: '본인 확인', verifySub: '등록된 이메일 주소를 입력해주세요.',
+    emailLabel: '이메일 주소', emailPlaceholder: 'example@email.com', verifyBtn: '확인하기',
     invalidEmail: '올바른 이메일 주소를 입력해주세요',
-    uploadTitle: '님, 환영합니다!',
-    uploadSub: '아래 항목을 제출해주세요.',
-    fileAccept: '지원 형식',
+    next: '다음', back: '<', submit: '제출하기',
+    personalTitle: '인적 정보', personalSub: '아래 항목을 입력해주세요.',
+    country: '국가', title: '경칭', firstName: '이름 (First Name)', middleName: '중간이름 (Middle)', lastName: '성 (Last Name)',
+    affiliation: '소속기관', department: '분과/부서', address: '주소', mobile: '연락처', email2: '추가 이메일',
+    accomTitle: '숙박 일정', accomSub: '체크인/체크아웃 날짜를 선택해주세요.',
+    checkin: '체크인', checkout: '체크아웃', roomType: '객실 타입', companion: '동반자', companionName: '동반자 성함',
+    double: 'Double Bed', twin: 'Twin Beds', yes: '있음', no: '없음',
+    accomNotice: '숙박 제공은 {N}박까지입니다.\n초과 숙박은 자비 부담이오니 참고 부탁드립니다.',
+    dietTitle: '식이 사항', dietSub: '특이식단이 있으시면 선택해주세요.',
+    dietSelf: '본인', dietCompanion: '동반자', none: 'None', vegetarian: 'Vegetarian', halal: 'Halal',
+    introTitle: '간단 소개', introSub: '200자 이내로 작성해주세요. 공식 웹사이트에 게재됩니다.',
+    introPlaceholder: '소개글을 입력해주세요...',
+    cvTitle: 'CV 작성', cvSub: '각 항목을 5줄 이내로 작성해주세요.',
+    education: '학력 (Educational Background)', career: '경력 (Professional Career)',
+    research: '연구 분야 (Research Field)', papers: '논문/저서 (Papers, Books)',
+    cvPlaceholder: '5줄 이내로 입력해주세요...',
+    filesTitle: '서류 제출', filesSub: '아래 서류를 제출해주세요.',
+    abstractLabel: '초록 (Abstract)', photoLabel: '증명사진 (Photo)', passportLabel: '여권 사본', taxCertLabel: '거주자 증명서 (Tax)',
+    abstractHint: 'PDF, DOC, DOCX', photoHint: 'JPG, PNG (4x5cm, 300DPI)', passportHint: 'JPG, PNG, PDF', taxCertHint: 'PDF',
+    fileSelect: '파일 선택', fileSelected: '새 파일 선택됨', filePrev: '제출됨', fileReplace: '클릭하여 새 파일 추가',
     fileMax: '최대',
-    fileSelect: '파일 선택',
-    fileSelected: '새 파일 선택됨',
-    filePrev: '제출됨',
-    fileReplace: '클릭하여 새 파일 추가',
-    abstractLabel: '초록 (Abstract)',
-    abstractHint: 'PDF, DOC, DOCX',
-    cvLabel: 'CV / 이력서',
-    cvHint: 'PDF, DOC, DOCX',
-    passportLabel: '여권 사본',
-    passportHint: 'JPG, PNG, PDF',
-    eventTitle: '사교행사 참석 여부',
-    submitBtn: '제출하기',
-    progressLabel: '제출 현황',
-    progressCount: '개 항목 중 {done}개 제출 완료',
-    doneTitle: '제출 완료',
-    doneMsg: '자료가 성공적으로 제출되었습니다.\n추가 안내사항은 이메일로 안내드리겠습니다.',
-    closedTitle: '제출 마감',
-    closedMsg: '자료 제출 기간이 마감되었습니다.\n문의사항은 아래로 연락해주세요.',
-    errorTitle: '접속 불가',
-    errorMsg: '등록되지 않은 이메일입니다.\n이메일을 다시 확인하시거나 사무국으로 문의해주세요.',
-    retryBtn: '이메일 다시 입력',
-    contactEmail: 'info.kphs@gmail.com',
+    eventsTitle: '사교행사 참석 여부',
+    doneTitle: '제출 완료', doneMsg: '자료가 성공적으로 제출되었습니다.\n추가 안내사항은 이메일로 안내드리겠습니다.',
+    closedTitle: '제출 마감', closedMsg: '자료 제출 기간이 마감되었습니다.\n문의사항은 아래로 연락해주세요.',
+    errorTitle: '접속 불가', errorMsg: '등록되지 않은 이메일입니다.\n이메일을 다시 확인하시거나 사무국으로 문의해주세요.',
+    retryBtn: '이메일 다시 입력', contactEmail: 'sci.kphs@gmail.com',
     toastError: '오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
     toastFileTooLarge: '파일 크기가 너무 큽니다',
-    toastNoFile: '파일을 하나 이상 제출하거나 사교행사 응답을 변경해주세요',
+    toastNoData: '변경된 내용이 없습니다',
   },
   en: {
     topBar: 'PH Korea 2026 · Document Submission',
-    verifyTitle: 'Verify Your Email',
-    verifySub: 'Please enter your registered email address.',
-    emailLabel: 'Email Address',
-    emailPlaceholder: 'example@email.com',
-    verifyBtn: 'Verify',
+    verifyTitle: 'Verify Your Email', verifySub: 'Please enter your registered email address.',
+    emailLabel: 'Email Address', emailPlaceholder: 'example@email.com', verifyBtn: 'Verify',
     invalidEmail: 'Please enter a valid email address',
-    uploadTitle: ', welcome!',
-    uploadSub: 'Please submit the following documents.',
-    fileAccept: 'Accepted formats',
+    next: 'Next', back: '<', submit: 'Submit',
+    personalTitle: 'Personal Information', personalSub: 'Please fill in the details below.',
+    country: 'Country', title: 'Title', firstName: 'First Name', middleName: 'Middle Name', lastName: 'Last Name',
+    affiliation: 'Affiliation', department: 'Department', address: 'Address', mobile: 'Mobile', email2: 'Additional Email',
+    accomTitle: 'Accommodation', accomSub: 'Please select your check-in and check-out dates.',
+    checkin: 'Check-in', checkout: 'Check-out', roomType: 'Room Type', companion: 'Accompanying Person', companionName: 'Companion Name',
+    double: 'Double Bed', twin: 'Twin Beds', yes: 'Yes', no: 'No',
+    accomNotice: 'Accommodation is provided for up to {N} nights.\nAdditional nights will be at your own expense.',
+    dietTitle: 'Dietary Requirements', dietSub: 'Please select if you have special dietary requirements.',
+    dietSelf: 'Faculty', dietCompanion: 'Accompanying Person', none: 'None', vegetarian: 'Vegetarian', halal: 'Halal',
+    introTitle: 'Brief Introduction', introSub: 'Please write a brief introduction (200 words or less). This will be posted on our official website.',
+    introPlaceholder: 'Enter your introduction...',
+    cvTitle: 'Curriculum Vitae', cvSub: 'Please fill in each section (5 lines or less).',
+    education: 'Educational Background', career: 'Professional Career',
+    research: 'Research Field', papers: 'Papers, Books, etc.',
+    cvPlaceholder: '5 lines or less...',
+    filesTitle: 'Documents', filesSub: 'Please submit the following documents.',
+    abstractLabel: 'Abstract', photoLabel: 'Photo', passportLabel: 'Passport Copy', taxCertLabel: 'Tax Certificate',
+    abstractHint: 'PDF, DOC, DOCX', photoHint: 'JPG, PNG (4x5cm, 300DPI)', passportHint: 'JPG, PNG, PDF', taxCertHint: 'PDF',
+    fileSelect: 'Choose File', fileSelected: 'New file selected', filePrev: 'Submitted', fileReplace: 'Click to add a new file',
     fileMax: 'Max',
-    fileSelect: 'Choose File',
-    fileSelected: 'New file selected',
-    filePrev: 'Submitted',
-    fileReplace: 'Click to add a new file',
-    abstractLabel: 'Abstract',
-    abstractHint: 'PDF, DOC, DOCX',
-    cvLabel: 'CV',
-    cvHint: 'PDF, DOC, DOCX',
-    passportLabel: 'Passport Copy',
-    passportHint: 'JPG, PNG, PDF',
-    eventTitle: 'Social Event Attendance',
-    submitBtn: 'Submit',
-    progressLabel: 'Submission Progress',
-    progressCount: '{done} of {total} items submitted',
-    doneTitle: 'Submission Complete',
-    doneMsg: 'Your documents have been submitted successfully.\nWe will send further instructions via email.',
-    closedTitle: 'Submission Closed',
-    closedMsg: 'The submission period has ended.\nPlease contact us for any inquiries.',
-    errorTitle: 'Access Denied',
-    errorMsg: 'This email is not registered.\nPlease check your email or contact the secretariat.',
-    retryBtn: 'Try Another Email',
-    contactEmail: 'info.kphs@gmail.com',
+    eventsTitle: 'Social Event Attendance',
+    doneTitle: 'Submission Complete', doneMsg: 'Your documents have been submitted successfully.\nWe will send further instructions via email.',
+    closedTitle: 'Submission Closed', closedMsg: 'The submission period has ended.\nPlease contact us for any inquiries.',
+    errorTitle: 'Access Denied', errorMsg: 'This email is not registered.\nPlease check your email or contact the secretariat.',
+    retryBtn: 'Try Another Email', contactEmail: 'sci.kphs@gmail.com',
     toastError: 'An error occurred. Please try again later.',
     toastFileTooLarge: 'File size is too large',
-    toastNoFile: 'Please submit at least one file or change event attendance',
+    toastNoData: 'No changes to submit',
   }
 };
 
-// ── 파일 항목 정의 ──
+// ── 파일 항목 ──
 const FILE_ITEMS = {
-  abstract: { icon: '\uD83D\uDCC4', accept: '.pdf,.doc,.docx', maxMB: 10 },
-  cv:       { icon: '\uD83D\uDCCB', accept: '.pdf,.doc,.docx', maxMB: 10 },
-  passport: { icon: '\uD83D\uDEC2', accept: '.jpg,.jpeg,.png,.pdf', maxMB: 4 },
+  abstract:  { icon: '\uD83D\uDCC4', accept: '.pdf,.doc,.docx', maxMB: 10 },
+  photo:     { icon: '\uD83D\uDCF7', accept: '.jpg,.jpeg,.png', maxMB: 4 },
+  passport:  { icon: '\uD83D\uDEC2', accept: '.jpg,.jpeg,.png,.pdf', maxMB: 4 },
+  taxCert:   { icon: '\uD83D\uDCCB', accept: '.pdf', maxMB: 4 },
 };
 
 // ── 상태 ──
 let lang = 'ko';
+let step = 0; // index in STEPS
 let S = {
-  view: 'verify',
-  email: '',
-  name: '',
-  affiliation: '',
-  required: {},
-  submitted: {},
-  socialEvents: [],
-  files: {},        // { abstract: File, cv: File, ... }
-  eventChecks: {},  // { welcome: true, ... }
+  email: '', name: '', affiliation: '', country: '',
+  required: {}, submitted: {}, socialEvents: [],
+  accommodation: null, // {nights, rangeStart, rangeEnd}
+  reply: null, // 기존 reply form 데이터
+  // 입력 데이터
+  form: {
+    country:'', title:'', firstName:'', middleName:'', lastName:'',
+    affiliation:'', department:'', address:'', mobile:'', email2:'',
+    checkinDate:'', checkoutDate:'', roomType:'double', hasCompanion:false, companionName:'',
+    dietSelf:'none', dietCompanion:'none',
+    introduction:'',
+    education:'', career:'', research:'', papers:'',
+  },
+  files: {}, eventChecks: {},
 };
 
 // ── 유틸 ──
 const g = id => document.getElementById(id);
 const t = key => L[lang][key] || key;
-
 function showOverlay(on) { g('overlay').classList.toggle('show', on); }
-function showToast(msg) {
-  const el = g('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2800);
-}
+function showToast(msg) { const el=g('toast'); el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),2800); }
+function showPopup(title, msg) { g('popup-title').textContent=title; g('popup-msg').textContent=msg; g('popup').classList.add('show'); }
+function closePopup() { g('popup').classList.remove('show'); }
 
 function setLang(l) {
   lang = l;
-  g('lang-ko').classList.toggle('active', l === 'ko');
-  g('lang-en').classList.toggle('active', l === 'en');
+  g('lang-ko').classList.toggle('active', l==='ko');
+  g('lang-en').classList.toggle('active', l==='en');
   g('top-bar').textContent = t('topBar');
   render();
 }
 
 function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload  = () => resolve(reader.result.split(',')[1]);
-    reader.onerror = reject;
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result.split(',')[1]);
+    reader.onerror=reject;
     reader.readAsDataURL(file);
   });
 }
 
-// ── 진행률 계산 ──
-function calcProgress() {
-  const fileKeys = Object.keys(S.required).filter(k => S.required[k]);
-  const done = fileKeys.filter(k => S.submitted[k] || S.files[k]).length;
-  return { total: fileKeys.length, done };
+// ── 스텝 바 ──
+function renderStepBar() {
+  const wrap = g('step-bar-wrap');
+  if (step === 0 || STEPS[step] === 'dashboard' || STEPS[step] === 'done' || STEPS[step] === 'closed' || STEPS[step] === 'error') {
+    wrap.innerHTML = '';
+    return;
+  }
+  const names = STEP_NAMES[lang];
+  let dots = '<div class="step-bar">';
+  for (let i = 1; i < STEPS.length - 1; i++) { // skip verify & done
+    let cls = 'step-dot';
+    if (i < step) cls += ' done';
+    else if (i === step) cls += ' active';
+    dots += `<div class="${cls}"></div>`;
+  }
+  dots += '</div>';
+  dots += `<div class="step-label">${names[step]}</div>`;
+  wrap.innerHTML = dots;
 }
 
-// ── 렌더링 ──
+// ── 날짜 유틸 ──
+function parseDateStr(s) {
+  if (!s) return null;
+  return new Date(s);
+}
+function formatDateShort(d) {
+  const m = d.getMonth()+1;
+  const day = d.getDate();
+  const dw = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
+  return { label: `${m}/${day}`, dw: dw, iso: d.toISOString().split('T')[0] };
+}
+function dateRange(start, end) {
+  const dates = [];
+  const d = new Date(start);
+  const e = new Date(end);
+  while (d <= e) { dates.push(new Date(d)); d.setDate(d.getDate()+1); }
+  return dates;
+}
+
+// ── 메인 렌더 ──
 function render() {
+  renderStepBar();
   const app = g('app');
+  const view = STEPS[step];
 
-  if (S.view === 'verify') {
-    app.innerHTML = `
-      <div class="card">
-        <div class="card-title">${t('verifyTitle')}</div>
-        <div class="card-sub">${t('verifySub')}</div>
-        <label class="field-label">${t('emailLabel')}</label>
-        <input type="email" id="email-input" placeholder="${t('emailPlaceholder')}" autocomplete="email">
-      </div>
-      <button class="btn" id="verify-btn">${t('verifyBtn')}</button>
-    `;
-    bindVerify();
-  }
-
-  else if (S.view === 'upload') {
-    const { total, done } = calcProgress();
-    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-    const progressText = lang === 'ko'
-      ? `${total}${t('progressCount').replace('{done}', done)}`
-      : t('progressCount').replace('{done}', done).replace('{total}', total);
-
-    // 파일 업로드 항목 생성
-    let fileHTML = '';
-    for (const [key, cfg] of Object.entries(FILE_ITEMS)) {
-      if (!S.required[key]) continue;
-      const sub = S.submitted[key];
-      const newFile = S.files[key];
-      const hasPrev = sub && sub.name;
-      const hasNew = !!newFile;
-
-      let boxClass = 'file-box';
-      let labelText = t('fileSelect');
-      let nameText = '';
-      let prevHTML = '';
-
-      if (hasNew) {
-        boxClass += ' has-file';
-        labelText = t('fileSelected');
-        nameText = newFile.name;
-        if (hasPrev) {
-          prevHTML = `<div class="prev-info">${t('filePrev')}: ${sub.name} (${sub.date})</div>`;
-        }
-      } else if (hasPrev) {
-        boxClass += ' has-prev';
-        labelText = `${t('filePrev')} (${sub.date})`;
-        nameText = sub.name;
-        prevHTML = `<div class="prev-info">${t('fileReplace')}</div>`;
-      }
-
-      fileHTML += `
-        <div class="file-row">
-          <label class="field-label">${t(key + 'Label')}</label>
-          <div class="${boxClass}" id="${key}-box" onclick="g('${key}-input').click()">
-            <div class="fi">${cfg.icon}</div>
-            <div class="fl" id="${key}-label">${labelText}</div>
-            <div class="fh">${t(key + 'Hint')} · ${t('fileMax')} ${cfg.maxMB}MB</div>
-            <div class="fn" id="${key}-name">${nameText}</div>
-            ${prevHTML}
-            <input type="file" id="${key}-input" accept="${cfg.accept}">
-          </div>
-        </div>
-      `;
-    }
-
-    // 사교행사 항목 생성
-    let eventHTML = '';
-    const enabledEvents = S.socialEvents.filter(ev => ev.enabled);
-    if (enabledEvents.length > 0) {
-      eventHTML = `
-        <div class="event-section">
-          <div class="card-title">${t('eventTitle')}</div>
-          <div style="margin-top: 8px;">
-      `;
-      for (const ev of enabledEvents) {
-        const checked = S.eventChecks[ev.id] ? 'checked' : '';
-        const evName = lang === 'ko' ? ev.name_ko : ev.name_en;
-        const evVenue = lang === 'ko' ? ev.venue_ko : ev.venue_en;
-        eventHTML += `
-          <div class="event-row">
-            <div class="event-check ${checked}" id="evck-${ev.id}" onclick="toggleEvent('${ev.id}')"></div>
-            <div class="event-info">
-              <div class="event-name">${evName}</div>
-              <div class="event-detail">${ev.date}${evVenue ? ' · ' + evVenue : ''}</div>
-            </div>
-          </div>
-        `;
-      }
-      eventHTML += '</div></div>';
-    }
-
-    app.innerHTML = `
-      <div class="progress-wrap">
-        <div class="progress-label">${t('progressLabel')}</div>
-        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-        <div class="progress-count">${progressText}</div>
-      </div>
-      <div class="card">
-        <div class="card-title">${S.name}${t('uploadTitle')}</div>
-        <div class="card-sub">${t('uploadSub')}</div>
-        ${fileHTML}
-        ${eventHTML}
-      </div>
-      <button class="btn" id="submit-btn">${t('submitBtn')}</button>
-    `;
-    bindUpload();
-  }
-
-  else if (S.view === 'done') {
-    app.innerHTML = `
-      <div class="result-wrap">
-        <div class="result-icon">\u2705</div>
-        <div class="result-title">${t('doneTitle')}</div>
-        <div class="result-msg">${t('doneMsg').replace(/\n/g, '<br>')}</div>
-      </div>
-      <button class="btn" onclick="reloadForm()">${lang === 'ko' ? '돌아가기' : 'Go Back'}</button>
-    `;
-  }
-
-  else if (S.view === 'closed') {
-    app.innerHTML = `
-      <div class="result-wrap">
-        <div class="result-icon">\u23F0</div>
-        <div class="result-title">${t('closedTitle')}</div>
-        <div class="result-msg">
-          ${t('closedMsg').replace(/\n/g, '<br>')}<br><br>
-          <a href="mailto:${t('contactEmail')}">\uD83D\uDCE7 ${t('contactEmail')}</a>
-        </div>
-      </div>
-    `;
-  }
-
-  else if (S.view === 'error') {
-    app.innerHTML = `
-      <div class="result-wrap">
-        <div class="result-icon">\u274C</div>
-        <div class="result-title">${t('errorTitle')}</div>
-        <div class="result-msg">
-          ${t('errorMsg').replace(/\n/g, '<br>')}<br><br>
-          <a href="mailto:${t('contactEmail')}">\uD83D\uDCE7 ${t('contactEmail')}</a>
-        </div>
-      </div>
-      <button class="btn" onclick="goBack()">${t('retryBtn')}</button>
-    `;
-  }
+  if (view === 'verify') renderVerify(app);
+  else if (view === 'dashboard') renderDashboard(app);
+  else if (view === 'personal') renderPersonal(app);
+  else if (view === 'accommodation') renderAccommodation(app);
+  else if (view === 'dietary') renderDietary(app);
+  else if (view === 'introduction') renderIntroduction(app);
+  else if (view === 'cv') renderCV(app);
+  else if (view === 'files') renderFiles(app);
+  else if (view === 'events') renderEvents(app);
+  else if (view === 'done') renderDone(app);
 }
 
-// ── 사교행사 체크 토글 ──
-function toggleEvent(id) {
-  S.eventChecks[id] = !S.eventChecks[id];
-  const el = g('evck-' + id);
-  if (el) el.classList.toggle('checked', S.eventChecks[id]);
-}
-
-// ── 뒤로가기 ──
-function goBack() {
-  S.email = '';
-  S.view = 'verify';
-  render();
-}
-
-// ── 제출 후 다시 폼으로 ──
-function reloadForm() {
-  S.files = {};
-  S.view = 'verify';
-  render();
-}
-
-// ── 이메일 확인 ──
-function bindVerify() {
+// ── Step: Verify ──
+function renderVerify(app) {
+  app.innerHTML = `
+    <div class="card">
+      <div class="card-title">${t('verifyTitle')}</div>
+      <div class="card-sub">${t('verifySub')}</div>
+      <label class="field-label">${t('emailLabel')}</label>
+      <input type="email" class="field-input" id="email-input" placeholder="${t('emailPlaceholder')}" autocomplete="email">
+    </div>
+    <div class="btn-row"><button class="btn" id="verify-btn">${t('verifyBtn')}</button></div>`;
   const input = g('email-input');
-  const btn   = g('verify-btn');
-
-  input.addEventListener('keydown', e => { if (e.key === 'Enter') btn.click(); });
-
+  const btn = g('verify-btn');
+  input.addEventListener('keydown', e => { if(e.key==='Enter') btn.click(); });
   btn.addEventListener('click', async () => {
     const email = input.value.trim();
-    if (!email || !email.includes('@')) {
-      showToast(t('invalidEmail'));
-      return;
-    }
+    if (!email || !email.includes('@')) { showToast(t('invalidEmail')); return; }
     S.email = email;
     showOverlay(true);
-
     try {
-      const res  = await fetch(`${GAS_URL}?action=checkEmail&email=${encodeURIComponent(email)}`);
+      const res = await fetch(`${GAS_URL}?action=checkEmail&email=${encodeURIComponent(email)}`);
       const json = await res.json();
       showOverlay(false);
-
       if (json.status === 'ok') {
-        S.name        = json.name || '';
+        S.name = json.name || '';
         S.affiliation = json.affiliation || '';
-        S.required    = json.required || {};
-        S.submitted   = json.submitted || {};
+        S.country = json.country || '';
+        S.required = json.required || {};
+        S.sections = json.sections || {};
+        S.submitted = json.submitted || {};
         S.socialEvents = json.socialEvents || [];
-        S.files       = {};
+        S.accommodation = json.accommodation || null;
+        S.files = {};
         S.eventChecks = {};
-        // 기존 사교행사 체크 상태 반영
-        for (const ev of S.socialEvents) {
-          if (ev.attending) S.eventChecks[ev.id] = true;
+        for (const ev of S.socialEvents) { if (ev.attending) S.eventChecks[ev.id] = true; }
+        // 기존 reply/cv 데이터 복원
+        if (json.reply) {
+          for (const k in json.reply) { if (S.form.hasOwnProperty(k)) S.form[k] = json.reply[k] || S.form[k]; }
         }
-        S.view = 'upload';
+        step = STEPS.indexOf('dashboard');
       } else if (json.status === 'closed') {
-        S.view = 'closed';
+        S.view = 'closed'; step = STEPS.length - 1;
+        app.innerHTML = '<div class="result-wrap"><div class="result-icon">\u23F0</div><div class="result-title">' + t('closedTitle') + '</div><div class="result-msg">' + t('closedMsg').replace(/\n/g,'<br>') + '<br><br><a href="mailto:' + t('contactEmail') + '">' + t('contactEmail') + '</a></div></div>';
+        showOverlay(false); return;
       } else {
-        S.view = 'error';
+        app.innerHTML = '<div class="result-wrap"><div class="result-icon">\u274C</div><div class="result-title">' + t('errorTitle') + '</div><div class="result-msg">' + t('errorMsg').replace(/\n/g,'<br>') + '<br><br><a href="mailto:' + t('contactEmail') + '">' + t('contactEmail') + '</a></div></div><div class="btn-row"><button class="btn" onclick="step=0;render()">' + t('retryBtn') + '</button></div>';
+        showOverlay(false); return;
       }
       render();
-    } catch (err) {
-      showOverlay(false);
-      showToast(t('toastError'));
-    }
+    } catch(err) { showOverlay(false); showToast(t('toastError')); }
   });
 }
 
-// ── 파일 업로드 바인딩 ──
-function bindUpload() {
-  for (const [key, cfg] of Object.entries(FILE_ITEMS)) {
-    if (!S.required[key]) continue;
-    const inputEl = g(key + '-input');
-    if (!inputEl) continue;
+// ── Step: Dashboard ──
+function renderDashboard(app) {
+  var items = [];
+  var sec = S.sections || {};
 
-    inputEl.addEventListener('change', function () {
-      const file = this.files[0];
-      if (!file) return;
-      if (file.size > cfg.maxMB * 1024 * 1024) {
-        showToast(`${t('toastFileTooLarge')} (${t('fileMax')} ${cfg.maxMB}MB)`);
-        this.value = '';
-        return;
-      }
-      S.files[key] = file;
-      // UI 즉시 업데이트
-      const box = g(key + '-box');
-      const label = g(key + '-label');
-      const nameEl = g(key + '-name');
-      if (box) { box.className = 'file-box has-file'; }
-      if (label) { label.textContent = t('fileSelected'); }
-      if (nameEl) { nameEl.textContent = file.name; }
-      // 진행률 업데이트
-      updateProgress();
-    });
+  // 1. 인적정보
+  var personalDone = !!(S.form.firstName && S.form.lastName && S.form.country);
+  items.push({ label: lang==='ko'?'인적정보':'Personal Info', step: 'personal', done: personalDone, expired: sec.replyForm && sec.replyForm.expired });
+
+  // 2. 숙박
+  if (sec.accommodation && sec.accommodation.target) {
+    var accomDone = !!(S.form.checkinDate && S.form.checkoutDate);
+    items.push({ label: lang==='ko'?'숙박 일정':'Accommodation', step: 'accommodation', done: accomDone, expired: sec.accommodation.expired });
   }
 
-  g('submit-btn').addEventListener('click', submitForm);
+  // 3. 식이
+  var dietDone = !!S.form.dietSelf;
+  items.push({ label: lang==='ko'?'특이식단':'Dietary', step: 'dietary', done: dietDone, expired: sec.replyForm && sec.replyForm.expired });
+
+  // 4. 간단 소개
+  var introDone = !!(S.form.introduction && S.form.introduction.trim());
+  items.push({ label: lang==='ko'?'간단 소개':'Introduction', step: 'introduction', done: introDone, expired: sec.replyForm && sec.replyForm.expired });
+
+  // 5. CV
+  var cvDone = !!(S.form.education || S.form.career || S.form.research || S.form.papers);
+  items.push({ label: 'CV', step: 'cv', done: cvDone, expired: sec.cv && sec.cv.expired });
+
+  // 6. 파일 항목들 (개별 표시)
+  var fileLabels = { abstract: lang==='ko'?'초록 (Abstract)':'Abstract', photo: lang==='ko'?'증명사진':'Photo', passport: lang==='ko'?'여권 사본':'Passport', taxcert: lang==='ko'?'거주자 증명서':'Tax Cert' };
+  var fKeys = Object.keys(fileLabels);
+  for (var i = 0; i < fKeys.length; i++) {
+    var fk = fKeys[i];
+    var req = S.required[fk];
+    if (!req || !req.target) continue;
+    var fileDone = !!(S.submitted[fk] && S.submitted[fk].name) || !!S.files[fk];
+    items.push({ label: fileLabels[fk], step: 'files', done: fileDone, expired: req.expired });
+  }
+
+  // 7. 사교행사
+  var evEnabled = S.socialEvents.filter(function(ev) { return ev.enabled; });
+  if (evEnabled.length > 0) {
+    var evDone = false;
+    for (var k in S.eventChecks) { if (S.eventChecks[k] !== undefined) { evDone = true; break; } }
+    items.push({ label: lang==='ko'?'사교행사':'Social Events', step: 'events', done: evDone, expired: false });
+  }
+
+  // 완료 카운트
+  var doneCount = 0;
+  for (var i = 0; i < items.length; i++) { if (items[i].done) doneCount++; }
+  var pct = items.length > 0 ? Math.round(doneCount / items.length * 100) : 0;
+
+  var html = '<div class="card"><div class="card-title">' + S.name + (lang==='ko'?' 님, 환영합니다!':',  welcome!') + '</div>';
+  html += '<div class="card-sub">' + (lang==='ko'?'아래 항목을 확인하고 제출해주세요.':'Please review and submit the items below.') + '</div>';
+  // 진행률
+  html += '<div style="margin-bottom:16px;">';
+  html += '<div style="display:flex;justify-content:space-between;font-size:12px;color:#8E8E93;margin-bottom:4px;"><span>' + (lang==='ko'?'제출 현황':'Progress') + '</span><span>' + doneCount + '/' + items.length + '</span></div>';
+  html += '<div style="height:8px;background:#E5E5EA;border-radius:4px;overflow:hidden;"><div style="height:100%;background:#34C759;border-radius:4px;width:' + pct + '%;transition:width .4s;"></div></div>';
+  html += '</div>';
+
+  // 항목 리스트
+  for (var i = 0; i < items.length; i++) {
+    var it = items[i];
+    var icon = it.done ? '\u2705' : '\u2B55';
+    var statusText = '';
+    if (it.expired) {
+      icon = '\u23F0';
+      statusText = '<span style="font-size:11px;color:#FF3B30;margin-left:8px;">' + (lang==='ko'?'마감':'Closed') + '</span>';
+    } else if (it.done) {
+      statusText = '<span style="font-size:11px;color:#34C759;margin-left:8px;">' + (lang==='ko'?'완료':'Done') + '</span>';
+    }
+    var clickable = !it.expired ? ' onclick="goToStep(\'' + it.step + '\')" style="cursor:pointer;"' : ' style="opacity:0.5;"';
+    html += '<div' + clickable + ' class="event-row">';
+    html += '<div style="font-size:20px;margin-right:12px;flex-shrink:0;">' + icon + '</div>';
+    html += '<div style="flex:1;"><div class="event-name">' + it.label + statusText + '</div></div>';
+    if (!it.expired) html += '<div style="color:#C7C7CC;font-size:18px;">&rsaquo;</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+
+  // 전체 제출 버튼
+  html += '<div class="btn-row"><button class="btn" onclick="submitAll()">' + t('submit') + '</button></div>';
+
+  app.innerHTML = html;
 }
 
-function updateProgress() {
-  const { total, done } = calcProgress();
-  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-  const fill = document.querySelector('.progress-fill');
-  const count = document.querySelector('.progress-count');
-  if (fill) fill.style.width = pct + '%';
-  if (count) {
-    count.textContent = lang === 'ko'
-      ? `${total}${t('progressCount').replace('{done}', done)}`
-      : t('progressCount').replace('{done}', done).replace('{total}', total);
+// ── Step: Personal Info ──
+function renderPersonal(app) {
+  const f = S.form;
+  app.innerHTML = `
+    <div class="card">
+      <div class="card-title">${t('personalTitle')}</div>
+      <div class="card-sub">${t('personalSub')}</div>
+      <label class="field-label">${t('country')} <span class="req">*</span></label>
+      <input class="field-input" id="f-country" value="${esc(f.country || S.country)}">
+      <label class="field-label">${t('title')} <span class="req">*</span></label>
+      <select class="field-select" id="f-title">
+        ${['Prof.','Dr.','Ph.D.','M.D.','RN.','Trainee','Others'].map(v=>`<option ${f.title===v?'selected':''}>${v}</option>`).join('')}
+      </select>
+      <div class="field-row">
+        <div><label class="field-label">${t('firstName')} <span class="req">*</span></label><input class="field-input" id="f-fn" value="${esc(f.firstName)}"></div>
+        <div><label class="field-label">${t('lastName')} <span class="req">*</span></label><input class="field-input" id="f-ln" value="${esc(f.lastName)}"></div>
+      </div>
+      <label class="field-label">${t('middleName')}</label>
+      <input class="field-input" id="f-mn" value="${esc(f.middleName)}">
+      <label class="field-label">${t('affiliation')} <span class="req">*</span></label>
+      <input class="field-input" id="f-affil" value="${esc(f.affiliation || S.affiliation)}">
+      <label class="field-label">${t('department')} <span class="req">*</span></label>
+      <input class="field-input" id="f-dept" value="${esc(f.department)}">
+      <label class="field-label">${t('address')} <span class="req">*</span></label>
+      <input class="field-input" id="f-addr" value="${esc(f.address)}">
+      <label class="field-label">${t('mobile')} <span class="req">*</span></label>
+      <input class="field-input" id="f-mobile" value="${esc(f.mobile)}" type="tel">
+      <label class="field-label">${t('email2')}</label>
+      <input class="field-input" id="f-email2" value="${esc(f.email2)}" type="email">
+    </div>
+    <div class="btn-row">
+      <button class="btn-back" onclick="goBack()">${t('back')}</button>
+      <button class="btn" onclick="savePersonal()">${t('next')}</button>
+    </div>`;
+}
+function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+
+function savePersonal() {
+  S.form.country = g('f-country').value.trim();
+  S.form.title = g('f-title').value;
+  S.form.firstName = capitalize(g('f-fn').value.trim());
+  S.form.lastName = capitalize(g('f-ln').value.trim());
+  S.form.middleName = capitalize(g('f-mn').value.trim());
+  S.form.affiliation = g('f-affil').value.trim();
+  S.form.department = g('f-dept').value.trim();
+  S.form.address = g('f-addr').value.trim();
+  S.form.mobile = g('f-mobile').value.trim();
+  S.form.email2 = g('f-email2').value.trim();
+
+  if (!S.form.country || !S.form.firstName || !S.form.lastName || !S.form.affiliation || !S.form.department || !S.form.address || !S.form.mobile) {
+    showToast(lang==='ko' ? '필수 항목을 입력해주세요' : 'Please fill in required fields');
+    return;
   }
+  var phoneRe = /^[\d\+\-\(\)\s]+$/;
+  if (!phoneRe.test(S.form.mobile)) {
+    showToast(lang==='ko' ? '전화번호 양식을 확인해주세요 (예: 010-1234-5678)' : 'Please check phone number format');
+    return;
+  }
+  if (S.form.email2 && !S.form.email2.includes('@')) {
+    showToast(lang==='ko' ? '추가 이메일 주소를 확인해주세요' : 'Please check additional email address');
+    return;
+  }
+  goToDashboard();
+}
+
+// ── Step: Accommodation ──
+function renderAccommodation(app) {
+  const sec = S.sections && S.sections.accommodation;
+  if (!sec || !sec.target) { step++; render(); return; } // 숙박 미대상
+  const accom = S.accommodation;
+  if (!accom) { step++; render(); return; } // 숙박 조건 미설정
+
+  const dates = dateRange(accom.rangeStart, accom.rangeEnd);
+  const f = S.form;
+
+  let checkinGrid = `<label class="field-label">${t('checkin')}</label><div class="date-grid">`;
+  for (const d of dates) {
+    const info = formatDateShort(d);
+    const sel = f.checkinDate === info.iso ? 'sel' : '';
+    checkinGrid += `<div class="date-cell ${sel}" onclick="selectCheckin('${info.iso}')"><div>${info.label}</div><div class="dw">${info.dw}</div></div>`;
+  }
+  checkinGrid += '</div>';
+
+  // 체크아웃: 체크인 다음날 ~ 범위 끝
+  let checkoutGrid = '';
+  if (f.checkinDate) {
+    const ciDate = new Date(f.checkinDate);
+    const nextDay = new Date(ciDate); nextDay.setDate(nextDay.getDate()+1);
+    const coDates = dateRange(nextDay, accom.rangeEnd);
+    checkoutGrid = `<label class="field-label" style="margin-top:16px">${t('checkout')}</label><div class="date-grid">`;
+    for (const d of coDates) {
+      const info = formatDateShort(d);
+      const sel = f.checkoutDate === info.iso ? 'sel' : '';
+      checkoutGrid += `<div class="date-cell ${sel}" onclick="selectCheckout('${info.iso}')"><div>${info.label}</div><div class="dw">${info.dw}</div></div>`;
+    }
+    checkoutGrid += '</div>';
+  }
+
+  app.innerHTML = `
+    <div class="card">
+      <div class="card-title">${t('accomTitle')}</div>
+      <div class="card-sub">${t('accomSub')}</div>
+      ${checkinGrid}
+      ${checkoutGrid}
+      <label class="field-label" style="margin-top:16px">${t('roomType')}</label>
+      <div class="radio-group">
+        <div class="radio-item ${f.roomType==='double'?'sel':''}" onclick="S.form.roomType='double';render()">${t('double')}</div>
+        <div class="radio-item ${f.roomType==='twin'?'sel':''}" onclick="S.form.roomType='twin';render()">${t('twin')}</div>
+      </div>
+      <label class="field-label">${t('companion')}</label>
+      <input class="field-input" id="f-comp" value="${esc(f.companionName)}" placeholder="${lang==='ko'?'동행인 영문 이름을 작성해 주세요 (없으면 비워두세요)':'Enter companion name in English (leave blank if none)'}" onchange="S.form.companionName=this.value.trim();S.form.hasCompanion=!!this.value.trim();render()">
+      ${f.companionName ? `
+      <label class="field-label">${lang==='ko'?'동행인 특이식단':'Companion Dietary'}</label>
+      <div class="radio-group">
+        ${['none','vegetarian','halal'].map(o=>'<div class="radio-item '+(f.dietCompanion===o?'sel':'')+'" onclick="S.form.dietCompanion=\''+o+'\';render()">'+t(o)+'</div>').join('')}
+      </div>` : ''}
+    </div>
+    <div class="btn-row">
+      <button class="btn-back" onclick="goBack()">${t('back')}</button>
+      <button class="btn" onclick="saveAccom()">${t('next')}</button>
+    </div>`;
+}
+function selectCheckin(iso) { S.form.checkinDate = iso; S.form.checkoutDate = ''; render(); }
+function selectCheckout(iso) {
+  S.form.checkoutDate = iso;
+  // 초과 체크
+  const accom = S.accommodation;
+  if (accom && accom.nights) {
+    const ci = new Date(S.form.checkinDate);
+    const co = new Date(iso);
+    const nights = Math.round((co - ci) / 86400000);
+    if (nights > accom.nights) {
+      showPopup(
+        lang==='ko' ? '숙박 안내' : 'Accommodation Notice',
+        t('accomNotice').replace('{N}', accom.nights)
+      );
+    }
+  }
+  render();
+}
+function saveAccom() {
+  if (S.accommodation && !S.form.checkinDate) { showToast(lang==='ko'?'체크인 날짜를 선택해주세요':'Please select check-in date'); return; }
+  if (S.accommodation && !S.form.checkoutDate) { showToast(lang==='ko'?'체크아웃 날짜를 선택해주세요':'Please select check-out date'); return; }
+  goToDashboard();
+}
+
+// ── Step: Dietary ──
+function renderDietary(app) {
+  const f = S.form;
+  const opts = ['none','vegetarian','halal'];
+  app.innerHTML = `
+    <div class="card">
+      <div class="card-title">${t('dietTitle')}</div>
+      <div class="card-sub">${t('dietSub')}</div>
+      <label class="field-label">${t('dietSelf')}</label>
+      <div class="radio-group">
+        ${opts.map(o=>`<div class="radio-item ${f.dietSelf===o?'sel':''}" onclick="S.form.dietSelf='${o}';render()">${t(o)}</div>`).join('')}
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-back" onclick="goBack()">${t('back')}</button>
+      <button class="btn" onclick="goToDashboard()">${lang==='ko'?'저장':'Save'}</button>
+    </div>`;
+}
+
+// ── Step: Introduction ──
+function renderIntroduction(app) {
+  app.innerHTML = `
+    <div class="card">
+      <div class="card-title">${t('introTitle')}</div>
+      <div class="card-sub">${t('introSub')}</div>
+      <textarea class="field-textarea" id="f-intro" rows="6" maxlength="800" placeholder="${t('introPlaceholder')}">${esc(S.form.introduction)}</textarea>
+      <div class="field-hint" id="intro-count">${(S.form.introduction||'').length}/200</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-back" onclick="goBack()">${t('back')}</button>
+      <button class="btn" onclick="S.form.introduction=g('f-intro').value;goToDashboard()">${lang==='ko'?'저장':'Save'}</button>
+    </div>`;
+  g('f-intro').addEventListener('input', function() {
+    g('intro-count').textContent = this.value.length + '/200';
+  });
+}
+
+// ── Step: CV ──
+function renderCV(app) {
+  const f = S.form;
+  const fields = [
+    {key:'education', label:t('education')},
+    {key:'career', label:t('career')},
+    {key:'research', label:t('research')},
+    {key:'papers', label:t('papers')},
+  ];
+  let html = `<div class="card"><div class="card-title">${t('cvTitle')}</div><div class="card-sub">${t('cvSub')}</div>`;
+  for (const fd of fields) {
+    html += `<label class="field-label">${fd.label}</label>
+    <textarea class="field-textarea" id="f-${fd.key}" rows="4" placeholder="${t('cvPlaceholder')}">${esc(f[fd.key])}</textarea>`;
+  }
+  html += `</div>
+  <div class="btn-row">
+    <button class="btn-back" onclick="goBack()">${t('back')}</button>
+    <button class="btn" onclick="saveCV()">${t('next')}</button>
+  </div>`;
+  app.innerHTML = html;
+}
+function saveCV() {
+  S.form.education = g('f-education').value;
+  S.form.career = g('f-career').value;
+  S.form.research = g('f-research').value;
+  S.form.papers = g('f-papers').value;
+  goToDashboard();
+}
+
+// ── Step: Files ──
+function renderFiles(app) {
+  let html = `<div class="card"><div class="card-title">${t('filesTitle')}</div><div class="card-sub">${t('filesSub')}</div>`;
+  for (const [key, cfg] of Object.entries(FILE_ITEMS)) {
+    const req = S.required[key];
+    if (!req || !req.target) continue; // 미대상이면 미노출
+    const isExpired = req.expired;
+
+    const sub = S.submitted[key];
+    const newFile = S.files[key];
+    const hasPrev = sub && sub.name;
+    const hasNew = !!newFile;
+    let boxClass = 'file-box';
+    let labelText = t('fileSelect');
+    let nameText = '';
+    let prevHTML = '';
+    if (hasNew) { boxClass+=' has-file'; labelText=t('fileSelected'); nameText=newFile.name; if(hasPrev) prevHTML=`<div class="prev-info">${t('filePrev')}: ${sub.name}</div>`; }
+    else if (hasPrev) { boxClass+=' has-prev'; labelText=`${t('filePrev')} (${sub.date})`; nameText=sub.name; prevHTML=`<div class="prev-info">${t('fileReplace')}</div>`; }
+
+    html += `<div class="file-row">
+      <label class="field-label">${t(key+'Label')}</label>
+      <div class="${boxClass}" id="${key}-box" onclick="g('${key}-input').click()">
+        <div class="fi">${cfg.icon}</div>
+        <div class="fl">${labelText}</div>
+        <div class="fh">${t(key+'Hint')} · ${t('fileMax')} ${cfg.maxMB}MB</div>
+        <div class="fn">${nameText}</div>${prevHTML}
+        <input type="file" id="${key}-input" accept="${cfg.accept}">
+      </div></div>`;
+  }
+  html += `</div>
+  <div class="btn-row">
+    <button class="btn-back" onclick="goToDashboard()">${t('back')}</button>
+    <button class="btn" onclick="goToDashboard()">${lang==='ko'?'저장':'Save'}</button>
+  </div>`;
+  app.innerHTML = html;
+
+  // 파일 바인딩
+  for (const [key, cfg] of Object.entries(FILE_ITEMS)) {
+    const el = g(key+'-input');
+    if (!el) continue;
+    el.addEventListener('change', function() {
+      const file = this.files[0];
+      if (!file) return;
+      if (file.size > cfg.maxMB*1024*1024) { showToast(t('toastFileTooLarge')); this.value=''; return; }
+      S.files[key] = file;
+      render();
+    });
+  }
+}
+
+// ── Step: Events ──
+function renderEvents(app) {
+  const enabled = S.socialEvents.filter(ev => ev.enabled);
+  let evHTML = '';
+  if (!S.eventCompanions) S.eventCompanions = {};
+  for (const ev of enabled) {
+    const evName = lang==='ko' ? ev.name_ko : ev.name_en;
+    const evVenue = lang==='ko' ? ev.venue_ko : ev.venue_en;
+    const attending = S.eventChecks[ev.id];
+    const companion = S.eventCompanions[ev.id] || '';
+    evHTML += `<div style="padding:14px 0;border-bottom:1px solid #F2F2F7;">
+      <div class="event-name">${evName}</div>
+      <div class="event-detail" style="margin-bottom:8px;">${ev.date}${evVenue?' · '+evVenue:''}</div>
+      <div class="radio-group" style="margin-bottom:6px;">
+        <div class="radio-item ${attending===true?'sel':''}" onclick="S.eventChecks['${ev.id}']=true;render()">Y</div>
+        <div class="radio-item ${attending===false?'sel':''}" onclick="S.eventChecks['${ev.id}']=false;render()">N</div>
+      </div>
+      ${attending ? `<input class="field-input" placeholder="${lang==='ko'?'동행인 성함 (선택)':'Companion name (optional)'}" value="${esc(companion)}" onchange="S.eventCompanions['${ev.id}']=this.value" style="margin-top:6px;font-size:14px;">` : ''}
+    </div>`;
+  }
+  app.innerHTML = `
+    <div class="card">
+      <div class="card-title">${t('eventsTitle')}</div>
+      ${evHTML || '<p style="color:#8E8E93;font-size:14px;">No events available</p>'}
+    </div>
+    <div class="btn-row">
+      <button class="btn-back" onclick="goToDashboard()">${t('back')}</button>
+      <button class="btn" onclick="goToDashboard()">${lang==='ko'?'저장':'Save'}</button>
+    </div>`;
+}
+
+// ── Step: Done ──
+function renderDone(app) {
+  app.innerHTML = `
+    <div class="result-wrap">
+      <div class="result-icon">\u2705</div>
+      <div class="result-title">${t('doneTitle')}</div>
+      <div class="result-msg">${t('doneMsg').replace(/\n/g,'<br>')}</div>
+    </div>
+    <div class="btn-row"><button class="btn" onclick="location.reload()">${lang==='ko'?'돌아가기':'Go Back'}</button></div>`;
 }
 
 // ── 제출 ──
-async function submitForm() {
-  const hasNewFiles = Object.keys(S.files).length > 0;
-  // 사교행사 변경 여부 확인
-  let eventChanged = false;
-  for (const ev of S.socialEvents) {
-    if (ev.enabled) {
-      const prev = !!ev.attending;
-      const curr = !!S.eventChecks[ev.id];
-      if (prev !== curr) { eventChanged = true; break; }
-    }
-  }
-
-  if (!hasNewFiles && !eventChanged) {
-    showToast(t('toastNoFile'));
-    return;
-  }
-
+async function submitAll() {
   showOverlay(true);
   try {
-    // 파일 → base64 변환
     const filePayloads = {};
     for (const [key, file] of Object.entries(S.files)) {
+      if (!file) continue;
       const b64 = await fileToBase64(file);
       filePayloads[key] = { name: file.name, type: file.type, data: b64 };
     }
-
     const payload = {
       email: S.email,
       name: S.name,
+      form: S.form,
       files: filePayloads,
       events: S.eventChecks,
+      eventCompanions: S.eventCompanions || {},
     };
-
-    await fetch(GAS_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(payload)
-    });
-
+    await fetch(GAS_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body: JSON.stringify(payload) });
     showOverlay(false);
-    S.view = 'done';
+    step = STEPS.indexOf('done');
     render();
-  } catch (err) {
-    showOverlay(false);
-    showToast(t('toastError'));
-  }
+  } catch(err) { showOverlay(false); showToast(t('toastError')); }
 }
 
+// ── 네비게이션 ──
+function goBack() {
+  step = STEPS.indexOf('dashboard');
+  render();
+}
+function goToDashboard() {
+  step = STEPS.indexOf('dashboard');
+  render();
+}
+function goToStep(name) {
+  step = STEPS.indexOf(name);
+  render();
+}
+
+// ── 이스케이프 ──
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ── 초기 렌더 ──
 render();
 </script>
 </body>
