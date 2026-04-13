@@ -634,8 +634,9 @@ function renderPersonal(app) {
       <input class="field-input" id="f-affil" value="${esc(f.affiliation || S.affiliation)}">
       <label class="field-label">${t('department')} <span class="req">*</span></label>
       <input class="field-input" id="f-dept" value="${esc(f.department)}">
+      ${isDomesticSpeaker() ? `
       <label class="field-label">${t('licenseNo')}</label>
-      <input class="field-input" id="f-lic" value="${esc(f.licenseNo)}">
+      <input class="field-input" id="f-lic" value="${esc(f.licenseNo)}">` : ''}
       <label class="field-label">${t('address')} <span class="req">*</span></label>
       <input class="field-input" id="f-addr" value="${esc(f.address)}">
       <label class="field-label">${t('mobile')} <span class="req">*</span></label>
@@ -679,7 +680,7 @@ function savePersonal() {
   S.form.middleName = capitalize(g('f-mn').value.trim());
   S.form.affiliation = g('f-affil').value.trim();
   S.form.department = g('f-dept').value.trim();
-  S.form.licenseNo = g('f-lic').value.trim();
+  if (g('f-lic')) S.form.licenseNo = g('f-lic').value.trim();
   S.form.address = g('f-addr').value.trim();
   S.form.mobile = g('f-mobile').value.trim();
   S.form.email2 = g('f-email2').value.trim();
