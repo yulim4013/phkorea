@@ -266,10 +266,10 @@
 const GAS_URL = "https://script.google.com/macros/s/AKfycbxDcTi1zG65jDI0jfq0g8Hu_oFTUN-8l6fqf6vQEWjsFBbL_h53TfjKbzwYlYV64Q/exec";
 
 // ── 스텝 정의 ──
-const STEPS = ["verify","dashboard","personal","accommodation","dietary","introduction","cv","files","events","done"];
+const STEPS = ["verify","dashboard","personal","accommodation","introduction","cv","files","events","done"];
 const STEP_NAMES = {
-  ko: ["확인","대시보드","인적정보","숙박","식이","소개","CV","파일","행사","완료"],
-  en: ["Verify","Dashboard","Info","Stay","Diet","Intro","CV","Files","Events","Done"]
+  ko: ["확인","대시보드","인적정보","숙박","소개","CV","파일","행사","완료"],
+  en: ["Verify","Dashboard","Info","Stay","Intro","CV","Files","Events","Done"]
 };
 
 // ── 다국어 ──
@@ -331,7 +331,7 @@ const L = {
     research: 'Research Field', papers: 'Papers, Books, etc.',
     cvPlaceholder: '5 lines or less...',
     filesTitle: 'Documents', filesSub: 'Please submit the following documents.',
-    abstractLabel: 'Abstract', photoLabel: 'Photo', passportLabel: 'Passport Copy', taxCertLabel: 'Tax Certificate',
+    abstractLabel: 'Abstract', photoLabel: 'Photo', passportLabel: 'Passport Copy', taxCertLabel: 'Certificate of Residence',
     abstractHint: 'PDF, DOC, DOCX', photoHint: 'JPG, PNG (4x5cm, 300DPI)', passportHint: 'JPG, PNG, PDF', taxCertHint: 'PDF',
     fileSelect: 'Choose File', fileSelected: 'New file selected', filePrev: 'Submitted', fileReplace: 'Click to add a new file',
     fileMax: 'Max',
@@ -448,7 +448,6 @@ function render() {
   else if (view === 'dashboard') renderDashboard(app);
   else if (view === 'personal') renderPersonal(app);
   else if (view === 'accommodation') renderAccommodation(app);
-  else if (view === 'dietary') renderDietary(app);
   else if (view === 'introduction') renderIntroduction(app);
   else if (view === 'cv') renderCV(app);
   else if (view === 'files') renderFiles(app);
@@ -513,7 +512,7 @@ function renderDashboard(app) {
   var items = [];
   var sec = S.sections || {};
 
-  // 1. 인적정보
+  // 1. 인적정보 (특이식단 포함)
   var personalDone = !!(S.form.firstName && S.form.lastName && S.form.country);
   items.push({ label: lang==='ko'?'인적정보':'Personal Info', step: 'personal', done: personalDone, expired: sec.replyForm && sec.replyForm.expired });
 
@@ -523,32 +522,34 @@ function renderDashboard(app) {
     items.push({ label: lang==='ko'?'숙박 일정':'Accommodation', step: 'accommodation', done: accomDone, expired: sec.accommodation.expired });
   }
 
-  // 3. 식이
-  var dietDone = !!S.form.dietSelf;
-  items.push({ label: lang==='ko'?'특이식단':'Dietary', step: 'dietary', done: dietDone, expired: sec.replyForm && sec.replyForm.expired });
-
-  // 4. 간단 소개
+  // 3. 간단 소개
   var introDone = !!(S.form.introduction && S.form.introduction.trim());
   items.push({ label: lang==='ko'?'간단 소개':'Introduction', step: 'introduction', done: introDone, expired: sec.replyForm && sec.replyForm.expired });
 
-  // 5. CV
+  // 4. CV
   var cvDone = !!(S.form.education || S.form.career || S.form.research || S.form.papers);
   items.push({ label: 'CV', step: 'cv', done: cvDone, expired: sec.cv && sec.cv.expired });
 
-  // 6. 파일 항목들 (개별 표시)
-  var fileLabels = { abstract: lang==='ko'?'초록 (Abstract)':'Abstract', photo: lang==='ko'?'증명사진':'Photo', passport: lang==='ko'?'여권 사본':'Passport', taxcert: lang==='ko'?'거주자 증명서':'Tax Cert' };
-  var fKeys = Object.keys(fileLabels);
-  for (var i = 0; i < fKeys.length; i++) {
-    var fk = fKeys[i];
-    var req = S.required[fk];
-    if (!req || !req.target) continue;
-    var fileDone = !!(S.submitted[fk] && S.submitted[fk].name) || !!S.files[fk];
-    items.push({ label: fileLabels[fk], step: 'files', done: fileDone, expired: req.expired });
+  // 5. 서류 제출 (모든 필수 파일이 제출되면 완료)
+  var fileKeys = ['abstract', 'photo', 'passport', 'taxcert'];
+  var anyFileTarget = false;
+  var allFilesDone = true;
+  var anyFileExpired = false;
+  for (var fi = 0; fi < fileKeys.length; fi++) {
+    var req = S.required[fileKeys[fi]];
+    if (req && req.target) {
+      anyFileTarget = true;
+      if (req.expired) anyFileExpired = true;
+      var done = !!(S.submitted[fileKeys[fi]] && S.submitted[fileKeys[fi]].name) || !!S.files[fileKeys[fi]];
+      if (!done) allFilesDone = false;
+    }
+  }
+  if (anyFileTarget) {
+    items.push({ label: lang==='ko'?'서류 제출':'Documents', step: 'files', done: allFilesDone, expired: anyFileExpired });
   }
 
-  // 7. 사교행사
-  var evEnabled = S.socialEvents.filter(function(ev) { return ev.enabled; });
-  if (evEnabled.length > 0) {
+  // 6. 사교행사 (대상인 경우만)
+  if (sec.events && sec.events.target) {
     var evDone = false;
     for (var k in S.eventChecks) { if (S.eventChecks[k] !== undefined) { evDone = true; break; } }
     items.push({ label: lang==='ko'?'사교행사':'Social Events', step: 'events', done: evDone, expired: false });
@@ -578,8 +579,8 @@ function renderDashboard(app) {
     } else if (it.done) {
       statusText = '<span style="font-size:11px;color:#34C759;margin-left:8px;">' + (lang==='ko'?'완료':'Done') + '</span>';
     }
-    var clickable = !it.expired ? ' onclick="goToStep(\'' + it.step + '\')" style="cursor:pointer;"' : ' style="opacity:0.5;"';
-    html += '<div' + clickable + ' class="event-row">';
+    var clickAttr = !it.expired ? ' data-step="' + it.step + '" style="cursor:pointer;"' : ' style="opacity:0.5;"';
+    html += '<div class="dash-item event-row"' + clickAttr + '>';
     html += '<div style="font-size:20px;margin-right:12px;flex-shrink:0;">' + icon + '</div>';
     html += '<div style="flex:1;"><div class="event-name">' + it.label + statusText + '</div></div>';
     if (!it.expired) html += '<div style="color:#C7C7CC;font-size:18px;">&rsaquo;</div>';
@@ -591,6 +592,14 @@ function renderDashboard(app) {
   html += '<div class="btn-row"><button class="btn" onclick="submitAll()">' + t('submit') + '</button></div>';
 
   app.innerHTML = html;
+  // 대시보드 항목 클릭 바인딩
+  var dashItems = document.querySelectorAll('.dash-item');
+  for (var d = 0; d < dashItems.length; d++) {
+    dashItems[d].addEventListener('click', function() {
+      var s = this.getAttribute('data-step');
+      if (s) goToStep(s);
+    });
+  }
 }
 
 // ── Step: Personal Info ──
@@ -622,10 +631,14 @@ function renderPersonal(app) {
       <input class="field-input" id="f-mobile" value="${esc(f.mobile)}" type="tel">
       <label class="field-label">${t('email2')}</label>
       <input class="field-input" id="f-email2" value="${esc(f.email2)}" type="email">
+      <label class="field-label">${lang==='ko'?'특이식단':'Dietary Requirement'}</label>
+      <div class="radio-group">
+        ${['none','vegetarian','halal'].map(o=>'<div class="radio-item '+(f.dietSelf===o?'sel':'')+'" onclick="S.form.dietSelf=\''+o+'\';render()">'+t(o)+'</div>').join('')}
+      </div>
     </div>
     <div class="btn-row">
       <button class="btn-back" onclick="goBack()">${t('back')}</button>
-      <button class="btn" onclick="savePersonal()">${t('next')}</button>
+      <button class="btn" onclick="savePersonal()">${lang==='ko'?'저장':'Save'}</button>
     </div>`;
 }
 function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
@@ -661,9 +674,16 @@ function savePersonal() {
 // ── Step: Accommodation ──
 function renderAccommodation(app) {
   const sec = S.sections && S.sections.accommodation;
-  if (!sec || !sec.target) { step++; render(); return; } // 숙박 미대상
+  if (!sec || !sec.target) { goToDashboard(); return; }
   const accom = S.accommodation;
-  if (!accom) { step++; render(); return; } // 숙박 조건 미설정
+  if (!accom) {
+    app.innerHTML = '<div class="card"><div class="card-title">' + t('accomTitle') + '</div><div class="card-sub">' + (lang==='ko'?'숙박 조건이 아직 설정되지 않았습니다. 사무국에 문의해주세요.':'Accommodation details have not been set. Please contact the secretariat.') + '</div></div><div class="btn-row"><button class="btn-back" onclick="goToDashboard()">' + t('back') + '</button></div>';
+    return;
+  }
+  if (!accom.rangeStart || !accom.rangeEnd) {
+    app.innerHTML = '<div class="card"><div class="card-title">' + t('accomTitle') + '</div><div class="card-sub">' + (lang==='ko'?'숙박 가능 날짜 범위가 설정되지 않았습니다. 사무국에 문의해주세요.':'Accommodation date range is not set. Please contact the secretariat.') + '</div></div><div class="btn-row"><button class="btn-back" onclick="goToDashboard()">' + t('back') + '</button></div>';
+    return;
+  }
 
   const dates = dateRange(accom.rangeStart, accom.rangeEnd);
   const f = S.form;
@@ -703,12 +723,7 @@ function renderAccommodation(app) {
         <div class="radio-item ${f.roomType==='twin'?'sel':''}" onclick="S.form.roomType='twin';render()">${t('twin')}</div>
       </div>
       <label class="field-label">${t('companion')}</label>
-      <input class="field-input" id="f-comp" value="${esc(f.companionName)}" placeholder="${lang==='ko'?'동행인 영문 이름을 작성해 주세요 (없으면 비워두세요)':'Enter companion name in English (leave blank if none)'}" onchange="S.form.companionName=this.value.trim();S.form.hasCompanion=!!this.value.trim();render()">
-      ${f.companionName ? `
-      <label class="field-label">${lang==='ko'?'동행인 특이식단':'Companion Dietary'}</label>
-      <div class="radio-group">
-        ${['none','vegetarian','halal'].map(o=>'<div class="radio-item '+(f.dietCompanion===o?'sel':'')+'" onclick="S.form.dietCompanion=\''+o+'\';render()">'+t(o)+'</div>').join('')}
-      </div>` : ''}
+      <input class="field-input" id="f-comp" value="${esc(f.companionName)}" placeholder="${lang==='ko'?'동행인 영문 이름을 작성해 주세요 (없으면 비워두세요)':'Enter companion name in English (leave blank if none)'}" onchange="S.form.companionName=this.value.trim();S.form.hasCompanion=!!this.value.trim()">
     </div>
     <div class="btn-row">
       <button class="btn-back" onclick="goBack()">${t('back')}</button>
@@ -857,28 +872,36 @@ function renderFiles(app) {
 
 // ── Step: Events ──
 function renderEvents(app) {
+  const f = S.form;
   const enabled = S.socialEvents.filter(ev => ev.enabled);
   let evHTML = '';
-  if (!S.eventCompanions) S.eventCompanions = {};
   for (const ev of enabled) {
     const evName = lang==='ko' ? ev.name_ko : ev.name_en;
     const evVenue = lang==='ko' ? ev.venue_ko : ev.venue_en;
     const attending = S.eventChecks[ev.id];
-    const companion = S.eventCompanions[ev.id] || '';
     evHTML += `<div style="padding:14px 0;border-bottom:1px solid #F2F2F7;">
       <div class="event-name">${evName}</div>
       <div class="event-detail" style="margin-bottom:8px;">${ev.date}${evVenue?' · '+evVenue:''}</div>
-      <div class="radio-group" style="margin-bottom:6px;">
+      <div class="radio-group">
         <div class="radio-item ${attending===true?'sel':''}" onclick="S.eventChecks['${ev.id}']=true;render()">Y</div>
         <div class="radio-item ${attending===false?'sel':''}" onclick="S.eventChecks['${ev.id}']=false;render()">N</div>
       </div>
-      ${attending ? `<input class="field-input" placeholder="${lang==='ko'?'동행인 성함 (선택)':'Companion name (optional)'}" value="${esc(companion)}" onchange="S.eventCompanions['${ev.id}']=this.value" style="margin-top:6px;font-size:14px;">` : ''}
     </div>`;
   }
   app.innerHTML = `
     <div class="card">
       <div class="card-title">${t('eventsTitle')}</div>
-      ${evHTML || '<p style="color:#8E8E93;font-size:14px;">No events available</p>'}
+      <label class="field-label">${lang==='ko'?'동반자 영문 이름 (없으면 비워두세요)':'Companion Name in English (leave blank if none)'}</label>
+      <input class="field-input" value="${esc(f.companionName)}" onchange="S.form.companionName=this.value.trim();render()">
+      ${f.companionName ? `
+      <label class="field-label">${lang==='ko'?'동반자 특이식단':'Companion Dietary'}</label>
+      <div class="radio-group">
+        ${['none','vegetarian','halal'].map(o=>'<div class="radio-item '+(f.dietCompanion===o?'sel':'')+'" onclick="S.form.dietCompanion=\''+o+'\';render()">'+t(o)+'</div>').join('')}
+      </div>` : ''}
+      <div style="margin-top:20px;">
+        <div class="card-title" style="font-size:15px;">${lang==='ko'?'참석 여부':'Attendance'}</div>
+        ${evHTML || '<p style="color:#8E8E93;font-size:14px;">No events available</p>'}
+      </div>
     </div>
     <div class="btn-row">
       <button class="btn-back" onclick="goToDashboard()">${t('back')}</button>
