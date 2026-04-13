@@ -131,6 +131,7 @@
     .date-cell:hover { border-color: #1B3A5C; }
     .date-cell.sel { border-color: #1B3A5C; background: #1B3A5C; color: #fff; }
     .date-cell.disabled { opacity: .3; pointer-events: none; }
+    .date-cell.excess { opacity: .4; cursor: not-allowed; background: #F2F2F7; }
     .date-cell .dw { font-size: 10px; color: #8E8E93; }
     .date-cell.sel .dw { color: rgba(255,255,255,.7); }
 
@@ -283,10 +284,13 @@ const L = {
     personalTitle: '인적 정보', personalSub: '아래 항목을 입력해주세요.',
     country: '국가', title: '경칭', firstName: '이름 (First Name)', middleName: '중간이름 (Middle)', lastName: '성 (Last Name)',
     affiliation: '소속기관', department: '분과/부서', address: '주소', mobile: '연락처', email2: '추가 이메일',
+    honorariumTitle: '사례금 지급 정보',
+    honorariumNotice: '다음 정보는 대한폐고혈압학회가 행사 후 사례금을 지급하기 위한 용도로만 활용되며, 행사 후 1개월까지만 보관됩니다. 수집된 정보는 제3자에게 제공되지 않으며, 동의를 거부할 경우 사례금 지급이 어려울 수 있습니다. 이 목적으로만 제출 정보를 활용하는 데 동의합니다. (별도의 의견이 있으시면 학회 사무국으로 문의해 주시기 바랍니다.)',
+    residentId: '주민등록번호', bankName: '은행명', accountNumber: '계좌번호', accountHolder: '예금주',
     accomTitle: '숙박 일정', accomSub: '체크인/체크아웃 날짜를 선택해주세요.',
     checkin: '체크인', checkout: '체크아웃', roomType: '객실 타입', companion: '동반자', companionName: '동반자 성함',
     double: 'Double Bed', twin: 'Twin Beds', yes: '있음', no: '없음',
-    accomNotice: '숙박 제공은 {N}박까지입니다.\n초과 숙박은 자비 부담이오니 참고 부탁드립니다.',
+    accomNotice: '숙박 제공은 {N}박입니다.\n초과 숙박을 원하실 경우 사무국 sci.kphs@gmail.com 으로 연락 주시기 바랍니다.',
     dietTitle: '식이 사항', dietSub: '특이식단이 있으시면 선택해주세요.',
     dietSelf: '본인', dietCompanion: '동반자', none: 'None', vegetarian: 'Vegetarian', halal: 'Halal',
     introTitle: '간단 소개', introSub: '200자 이내로 작성해주세요. 공식 웹사이트에 게재됩니다.',
@@ -296,8 +300,8 @@ const L = {
     research: '연구 분야 (Research Field)', papers: '논문/저서 (Papers, Books)',
     cvPlaceholder: '5줄 이내로 입력해주세요...',
     filesTitle: '서류 제출', filesSub: '아래 서류를 제출해주세요.',
-    abstractLabel: '초록 (Abstract)', photoLabel: '증명사진 (Photo)', passportLabel: '여권 사본', taxCertLabel: '거주자 증명서 (Tax)',
-    abstractHint: 'PDF, DOC, DOCX', photoHint: 'JPG, PNG (4x5cm, 300DPI)', passportHint: 'JPG, PNG, PDF', taxCertHint: 'PDF',
+    abstractLabel: '초록 (Abstract)', photoLabel: '증명사진 (Photo)', passportLabel: '여권 사본', taxcertLabel: '거주자 증명서 (Certificate of Residence)',
+    abstractHint: 'PDF, DOC, DOCX', photoHint: 'JPG, PNG (4x5cm, 300DPI)', passportHint: 'JPG, PNG, PDF', taxcertHint: 'PDF',
     fileSelect: '파일 선택', fileSelected: '새 파일 선택됨', filePrev: '제출됨', fileReplace: '클릭하여 새 파일 추가',
     fileMax: '최대',
     eventsTitle: '사교행사 참석 여부',
@@ -318,10 +322,13 @@ const L = {
     personalTitle: 'Personal Information', personalSub: 'Please fill in the details below.',
     country: 'Country', title: 'Title', firstName: 'First Name', middleName: 'Middle Name', lastName: 'Last Name',
     affiliation: 'Affiliation', department: 'Department', address: 'Address', mobile: 'Mobile', email2: 'Additional Email',
+    honorariumTitle: 'Honorarium Payment Information',
+    honorariumNotice: 'The following information will be used solely by the Korean Society of Pulmonary Hypertension for honorarium payment after the event, and will be retained for one month after the event. Collected information will not be shared with third parties, and declining may make honorarium payment difficult. By providing this information, you consent to its use for this purpose only. (For any concerns, please contact the secretariat.)',
+    residentId: 'Resident Registration Number', bankName: 'Bank Name', accountNumber: 'Account Number', accountHolder: 'Account Holder',
     accomTitle: 'Accommodation', accomSub: 'Please select your check-in and check-out dates.',
     checkin: 'Check-in', checkout: 'Check-out', roomType: 'Room Type', companion: 'Accompanying Person', companionName: 'Companion Name',
     double: 'Double Bed', twin: 'Twin Beds', yes: 'Yes', no: 'No',
-    accomNotice: 'Accommodation is provided for up to {N} nights.\nAdditional nights will be at your own expense.',
+    accomNotice: 'Accommodation is provided for {N} night(s).\nFor additional nights, please contact the secretariat at sci.kphs@gmail.com.',
     dietTitle: 'Dietary Requirements', dietSub: 'Please select if you have special dietary requirements.',
     dietSelf: 'Faculty', dietCompanion: 'Accompanying Person', none: 'None', vegetarian: 'Vegetarian', halal: 'Halal',
     introTitle: 'Brief Introduction', introSub: 'Please write a brief introduction (200 words or less). This will be posted on our official website.',
@@ -331,8 +338,8 @@ const L = {
     research: 'Research Field', papers: 'Papers, Books, etc.',
     cvPlaceholder: '5 lines or less...',
     filesTitle: 'Documents', filesSub: 'Please submit the following documents.',
-    abstractLabel: 'Abstract', photoLabel: 'Photo', passportLabel: 'Passport Copy', taxCertLabel: 'Certificate of Residence',
-    abstractHint: 'PDF, DOC, DOCX', photoHint: 'JPG, PNG (4x5cm, 300DPI)', passportHint: 'JPG, PNG, PDF', taxCertHint: 'PDF',
+    abstractLabel: 'Abstract', photoLabel: 'Photo', passportLabel: 'Passport Copy', taxcertLabel: 'Certificate of Residence',
+    abstractHint: 'PDF, DOC, DOCX', photoHint: 'JPG, PNG (4x5cm, 300DPI)', passportHint: 'JPG, PNG, PDF', taxcertHint: 'PDF',
     fileSelect: 'Choose File', fileSelected: 'New file selected', filePrev: 'Submitted', fileReplace: 'Click to add a new file',
     fileMax: 'Max',
     eventsTitle: 'Social Event Attendance',
@@ -351,7 +358,7 @@ const FILE_ITEMS = {
   abstract:  { icon: '\uD83D\uDCC4', accept: '.pdf,.doc,.docx', maxMB: 10 },
   photo:     { icon: '\uD83D\uDCF7', accept: '.jpg,.jpeg,.png', maxMB: 4 },
   passport:  { icon: '\uD83D\uDEC2', accept: '.jpg,.jpeg,.png,.pdf', maxMB: 4 },
-  taxCert:   { icon: '\uD83D\uDCCB', accept: '.pdf', maxMB: 4 },
+  taxcert:   { icon: '\uD83D\uDCDC', accept: '.pdf', maxMB: 4 },
 };
 
 // ── 상태 ──
@@ -370,6 +377,7 @@ let S = {
     dietSelf:'none', dietCompanion:'none',
     introduction:'',
     education:'', career:'', research:'', papers:'',
+    residentId:'', bankName:'', accountNumber:'', accountHolder:'',
   },
   files: {}, eventChecks: {},
 };
@@ -635,6 +643,19 @@ function renderPersonal(app) {
       <div class="radio-group">
         ${['none','vegetarian','halal'].map(o=>'<div class="radio-item '+(f.dietSelf===o?'sel':'')+'" onclick="S.form.dietSelf=\''+o+'\';render()">'+t(o)+'</div>').join('')}
       </div>
+      ${isDomesticSpeaker() ? `
+      <div style="margin-top:24px;padding-top:20px;border-top:1px solid #E5E5EA;">
+        <div class="card-title" style="font-size:15px;">${t('honorariumTitle')}</div>
+        <div class="card-sub" style="font-size:12px;line-height:1.6;color:#666;white-space:pre-line;">${t('honorariumNotice')}</div>
+        <label class="field-label">${t('residentId')}</label>
+        <input class="field-input" id="f-rid" value="${esc(f.residentId)}" placeholder="000000-0000000">
+        <label class="field-label">${t('bankName')}</label>
+        <input class="field-input" id="f-bank" value="${esc(f.bankName)}">
+        <label class="field-label">${t('accountNumber')}</label>
+        <input class="field-input" id="f-acct" value="${esc(f.accountNumber)}">
+        <label class="field-label">${t('accountHolder')}</label>
+        <input class="field-input" id="f-holder" value="${esc(f.accountHolder)}">
+      </div>` : ''}
     </div>
     <div class="btn-row">
       <button class="btn-back" onclick="goBack()">${t('back')}</button>
@@ -642,6 +663,10 @@ function renderPersonal(app) {
     </div>`;
 }
 function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+function isDomesticSpeaker() {
+  var c = (S.form.country || S.country || '').toString().trim();
+  return c === 'Korea' || c === '대한민국' || c === 'KR' || c === 'KOR';
+}
 
 function savePersonal() {
   S.form.country = g('f-country').value.trim();
@@ -654,6 +679,10 @@ function savePersonal() {
   S.form.address = g('f-addr').value.trim();
   S.form.mobile = g('f-mobile').value.trim();
   S.form.email2 = g('f-email2').value.trim();
+  if (g('f-rid')) S.form.residentId = g('f-rid').value.trim();
+  if (g('f-bank')) S.form.bankName = g('f-bank').value.trim();
+  if (g('f-acct')) S.form.accountNumber = g('f-acct').value.trim();
+  if (g('f-holder')) S.form.accountHolder = g('f-holder').value.trim();
 
   if (!S.form.country || !S.form.firstName || !S.form.lastName || !S.form.affiliation || !S.form.department || !S.form.address || !S.form.mobile) {
     showToast(lang==='ko' ? '필수 항목을 입력해주세요' : 'Please fill in required fields');
@@ -671,42 +700,49 @@ function savePersonal() {
   goToDashboard();
 }
 
-// ── Step: Accommodation ──
+// ── Step: Accommodation (고정 날짜) ──
+// 체크인: 6/25, 6/26, 6/27 / 체크아웃: 6/26, 6/27, 6/28
+const ACCOM_CHECKIN_DATES = [
+  { iso: '2026-06-25', label: 'Jun 25', dw: 'Thu' },
+  { iso: '2026-06-26', label: 'Jun 26', dw: 'Fri' },
+  { iso: '2026-06-27', label: 'Jun 27', dw: 'Sat' },
+];
+const ACCOM_CHECKOUT_DATES = [
+  { iso: '2026-06-26', label: 'Jun 26', dw: 'Fri' },
+  { iso: '2026-06-27', label: 'Jun 27', dw: 'Sat' },
+  { iso: '2026-06-28', label: 'Jun 28', dw: 'Sun' },
+];
 function renderAccommodation(app) {
   const sec = S.sections && S.sections.accommodation;
   if (!sec || !sec.target) { goToDashboard(); return; }
   const accom = S.accommodation;
-  if (!accom || !accom.rangeStart || !accom.nights) {
-    app.innerHTML = '<div class="card"><div class="card-title">' + t('accomTitle') + '</div><div class="card-sub">' + (lang==='ko'?'숙박 조건이 아직 설정되지 않았습니다. 사무국에 문의해주세요.':'Accommodation details have not been set. Please contact the secretariat.') + '</div></div><div class="btn-row"><button class="btn-back" onclick="goToDashboard()">' + t('back') + '</button></div>';
-    return;
-  }
-
+  const nights = accom && accom.nights ? Number(accom.nights) : 0;
   const f = S.form;
-  // 체크인 범위: rangeStart ~ rangeStart + 6일 (여유)
-  const startDate = new Date(accom.rangeStart);
-  const checkinEnd = new Date(startDate); checkinEnd.setDate(checkinEnd.getDate() + 6);
-  const checkinDates = dateRange(startDate, checkinEnd);
 
   let checkinGrid = `<label class="field-label">${t('checkin')}</label><div class="date-grid">`;
-  for (const d of checkinDates) {
-    const info = formatDateShort(d);
+  for (const info of ACCOM_CHECKIN_DATES) {
     const sel = f.checkinDate === info.iso ? 'sel' : '';
     checkinGrid += `<div class="date-cell ${sel}" onclick="selectCheckin('${info.iso}')"><div>${info.label}</div><div class="dw">${info.dw}</div></div>`;
   }
   checkinGrid += '</div>';
 
-  // 체크아웃 범위: 체크인 다음날 ~ 체크인 + 제공박수 + 3일 (초과 선택 가능, 팝업으로 안내)
   let checkoutGrid = '';
   if (f.checkinDate) {
     const ciDate = new Date(f.checkinDate);
-    const nextDay = new Date(ciDate); nextDay.setDate(nextDay.getDate()+1);
-    const coEnd = new Date(ciDate); coEnd.setDate(coEnd.getDate() + accom.nights + 3);
-    const coDates = dateRange(nextDay, coEnd);
     checkoutGrid = `<label class="field-label" style="margin-top:16px">${t('checkout')}</label><div class="date-grid">`;
-    for (const d of coDates) {
-      const info = formatDateShort(d);
+    for (const info of ACCOM_CHECKOUT_DATES) {
+      const coDate = new Date(info.iso);
+      const diffNights = Math.round((coDate - ciDate) / 86400000);
+      // 체크아웃은 체크인 이후여야 함
+      if (diffNights <= 0) continue;
+      // 초과 박수면 선택 불가 (클릭 시 팝업만)
+      const isExcess = nights > 0 && diffNights > nights;
       const sel = f.checkoutDate === info.iso ? 'sel' : '';
-      checkoutGrid += `<div class="date-cell ${sel}" onclick="selectCheckout('${info.iso}')"><div>${info.label}</div><div class="dw">${info.dw}</div></div>`;
+      const cls = 'date-cell ' + sel + (isExcess ? ' excess' : '');
+      const handler = isExcess
+        ? `onclick="showExcessNotice(${nights})"`
+        : `onclick="selectCheckout('${info.iso}')"`;
+      checkoutGrid += `<div class="${cls}" ${handler}><div>${info.label}</div><div class="dw">${info.dw}</div></div>`;
     }
     checkoutGrid += '</div>';
   }
@@ -731,22 +767,12 @@ function renderAccommodation(app) {
     </div>`;
 }
 function selectCheckin(iso) { S.form.checkinDate = iso; S.form.checkoutDate = ''; render(); }
-function selectCheckout(iso) {
-  S.form.checkoutDate = iso;
-  // 초과 체크
-  const accom = S.accommodation;
-  if (accom && accom.nights) {
-    const ci = new Date(S.form.checkinDate);
-    const co = new Date(iso);
-    const nights = Math.round((co - ci) / 86400000);
-    if (nights > accom.nights) {
-      showPopup(
-        lang==='ko' ? '숙박 안내' : 'Accommodation Notice',
-        t('accomNotice').replace('{N}', accom.nights)
-      );
-    }
-  }
-  render();
+function selectCheckout(iso) { S.form.checkoutDate = iso; render(); }
+function showExcessNotice(nights) {
+  showPopup(
+    lang==='ko' ? '숙박 안내' : 'Accommodation Notice',
+    t('accomNotice').replace('{N}', nights)
+  );
 }
 function saveAccom() {
   if (S.accommodation && !S.form.checkinDate) { showToast(lang==='ko'?'체크인 날짜를 선택해주세요':'Please select check-in date'); return; }
