@@ -283,7 +283,7 @@ const L = {
     next: '다음', back: '<', submit: '제출하기',
     personalTitle: '인적 정보', personalSub: '아래 항목을 입력해주세요.',
     country: '국가', title: '경칭', firstName: '이름 (First Name)', middleName: '중간이름 (Middle)', lastName: '성 (Last Name)',
-    affiliation: '소속기관', department: '분과/부서', address: '주소', mobile: '연락처', email2: '추가 이메일',
+    affiliation: '소속기관', department: '분과/부서', licenseNo: '의사면허번호', address: '주소', mobile: '연락처', email2: '추가 이메일',
     honorariumTitle: '사례금 지급 정보',
     honorariumNotice: '다음 정보는 대한폐고혈압학회가 행사 후 사례금을 지급하기 위한 용도로만 활용되며, 행사 후 1개월까지만 보관됩니다. 수집된 정보는 제3자에게 제공되지 않으며, 동의를 거부할 경우 사례금 지급이 어려울 수 있습니다. 이 목적으로만 제출 정보를 활용하는 데 동의합니다. (별도의 의견이 있으시면 학회 사무국으로 문의해 주시기 바랍니다.)',
     residentId: '주민등록번호', bankName: '은행명', accountNumber: '계좌번호', accountHolder: '예금주',
@@ -321,7 +321,7 @@ const L = {
     next: 'Next', back: '<', submit: 'Submit',
     personalTitle: 'Personal Information', personalSub: 'Please fill in the details below.',
     country: 'Country', title: 'Title', firstName: 'First Name', middleName: 'Middle Name', lastName: 'Last Name',
-    affiliation: 'Affiliation', department: 'Department', address: 'Address', mobile: 'Mobile', email2: 'Additional Email',
+    affiliation: 'Affiliation', department: 'Department', licenseNo: 'Medical License No.', address: 'Address', mobile: 'Mobile', email2: 'Additional Email',
     honorariumTitle: 'Honorarium Payment Information',
     honorariumNotice: 'The following information will be used solely by the Korean Society of Pulmonary Hypertension for honorarium payment after the event, and will be retained for one month after the event. Collected information will not be shared with third parties, and declining may make honorarium payment difficult. By providing this information, you consent to its use for this purpose only. (For any concerns, please contact the secretariat.)',
     residentId: 'Resident Registration Number', bankName: 'Bank Name', accountNumber: 'Account Number', accountHolder: 'Account Holder',
@@ -377,6 +377,7 @@ let S = {
     dietSelf:'none', dietCompanion:'none',
     introduction:'',
     education:'', career:'', research:'', papers:'',
+    licenseNo:'',
     residentId:'', bankName:'', accountNumber:'', accountHolder:'',
   },
   files: {}, eventChecks: {},
@@ -633,6 +634,8 @@ function renderPersonal(app) {
       <input class="field-input" id="f-affil" value="${esc(f.affiliation || S.affiliation)}">
       <label class="field-label">${t('department')} <span class="req">*</span></label>
       <input class="field-input" id="f-dept" value="${esc(f.department)}">
+      <label class="field-label">${t('licenseNo')}</label>
+      <input class="field-input" id="f-lic" value="${esc(f.licenseNo)}">
       <label class="field-label">${t('address')} <span class="req">*</span></label>
       <input class="field-input" id="f-addr" value="${esc(f.address)}">
       <label class="field-label">${t('mobile')} <span class="req">*</span></label>
@@ -676,6 +679,7 @@ function savePersonal() {
   S.form.middleName = capitalize(g('f-mn').value.trim());
   S.form.affiliation = g('f-affil').value.trim();
   S.form.department = g('f-dept').value.trim();
+  S.form.licenseNo = g('f-lic').value.trim();
   S.form.address = g('f-addr').value.trim();
   S.form.mobile = g('f-mobile').value.trim();
   S.form.email2 = g('f-email2').value.trim();
