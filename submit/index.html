@@ -712,24 +712,35 @@ function savePersonal() {
   goToDashboard();
 }
 
-// ── Step: Accommodation (고정 날짜) ──
-// 체크인: 6/25, 6/26, 6/27 / 체크아웃: 6/26, 6/27, 6/28
+// ── Step: Accommodation (체크인만 선택, 체크아웃 자동 계산) ──
 const ACCOM_CHECKIN_DATES = [
   { iso: '2026-06-25', label: 'Jun 25', dw: 'Thu' },
   { iso: '2026-06-26', label: 'Jun 26', dw: 'Fri' },
   { iso: '2026-06-27', label: 'Jun 27', dw: 'Sat' },
 ];
-const ACCOM_CHECKOUT_DATES = [
-  { iso: '2026-06-26', label: 'Jun 26', dw: 'Fri' },
-  { iso: '2026-06-27', label: 'Jun 27', dw: 'Sat' },
-  { iso: '2026-06-28', label: 'Jun 28', dw: 'Sun' },
-];
 function renderAccommodation(app) {
   const sec = S.sections && S.sections.accommodation;
   if (!sec || !sec.target) { goToDashboard(); return; }
   const accom = S.accommodation;
-  const nights = accom && accom.nights ? Number(accom.nights) : 0;
+  const nights = accom && accom.nights ? Number(accom.nights) : 1;
   const f = S.form;
+
+  // 체크아웃 자동 계산
+  let coLabel = '';
+  if (f.checkinDate) {
+    const ciDate = new Date(f.checkinDate);
+    const coDate = new Date(ciDate);
+    coDate.setDate(coDate.getDate() + nights);
+    f.checkoutDate = coDate.toISOString().split('T')[0];
+    const m = coDate.getMonth() + 1, d = coDate.getDate();
+    const dw = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][coDate.getDay()];
+    coLabel = `${coDate.getFullYear()}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')} (${dw})`;
+  }
+
+  // 안내 문구
+  const noticeText = lang==='ko'
+    ? `숙박은 <b>${nights}박</b>만 제공됩니다. 추가 숙박이 필요하신 경우 사무국(<a href="mailto:sci.kphs@gmail.com">sci.kphs@gmail.com</a>)으로 연락 주시기 바랍니다.`
+    : `Only <b>${nights} night(s)</b> of accommodation are provided. For additional nights, please contact the secretariat (<a href="mailto:sci.kphs@gmail.com">sci.kphs@gmail.com</a>).`;
 
   let checkinGrid = `<label class="field-label">${t('checkin')}</label><div class="date-grid">`;
   for (const info of ACCOM_CHECKIN_DATES) {
@@ -738,33 +749,19 @@ function renderAccommodation(app) {
   }
   checkinGrid += '</div>';
 
-  let checkoutGrid = '';
-  if (f.checkinDate) {
-    const ciDate = new Date(f.checkinDate);
-    checkoutGrid = `<label class="field-label" style="margin-top:16px">${t('checkout')}</label><div class="date-grid">`;
-    for (const info of ACCOM_CHECKOUT_DATES) {
-      const coDate = new Date(info.iso);
-      const diffNights = Math.round((coDate - ciDate) / 86400000);
-      // 체크아웃은 체크인 이후여야 함
-      if (diffNights <= 0) continue;
-      // 초과 박수면 선택 불가 (클릭 시 팝업만)
-      const isExcess = nights > 0 && diffNights > nights;
-      const sel = f.checkoutDate === info.iso ? 'sel' : '';
-      const cls = 'date-cell ' + sel + (isExcess ? ' excess' : '');
-      const handler = isExcess
-        ? `onclick="showExcessNotice(${nights})"`
-        : `onclick="selectCheckout('${info.iso}')"`;
-      checkoutGrid += `<div class="${cls}" ${handler}><div>${info.label}</div><div class="dw">${info.dw}</div></div>`;
-    }
-    checkoutGrid += '</div>';
-  }
+  const checkoutDisplay = f.checkinDate
+    ? `<label class="field-label" style="margin-top:16px">${t('checkout')}</label>
+       <div style="padding:14px;background:#F2F2F7;border-radius:8px;font-size:15px;color:#1B3A5C;font-weight:600;">${coLabel}</div>`
+    : '';
 
   app.innerHTML = `
     <div class="card">
       <div class="card-title">${t('accomTitle')}</div>
-      <div class="card-sub">${t('accomSub')}</div>
+      <div style="background:#FFF9E6;border-left:3px solid #FFB800;padding:12px 14px;border-radius:6px;font-size:13px;line-height:1.6;color:#5C4400;margin-bottom:16px;">
+        ${noticeText}
+      </div>
       ${checkinGrid}
-      ${checkoutGrid}
+      ${checkoutDisplay}
       <label class="field-label" style="margin-top:16px">${t('roomType')}</label>
       <div class="radio-group">
         <div class="radio-item ${f.roomType==='double'?'sel':''}" onclick="S.form.roomType='double';render()">${t('double')}</div>
@@ -778,14 +775,7 @@ function renderAccommodation(app) {
       <button class="btn" onclick="saveAccom()">${t('next')}</button>
     </div>`;
 }
-function selectCheckin(iso) { S.form.checkinDate = iso; S.form.checkoutDate = ''; render(); }
-function selectCheckout(iso) { S.form.checkoutDate = iso; render(); }
-function showExcessNotice(nights) {
-  showPopup(
-    lang==='ko' ? '숙박 안내' : 'Accommodation Notice',
-    t('accomNotice').replace('{N}', nights)
-  );
-}
+function selectCheckin(iso) { S.form.checkinDate = iso; render(); }
 function saveAccom() {
   if (S.accommodation && !S.form.checkinDate) { showToast(lang==='ko'?'체크인 날짜를 선택해주세요':'Please select check-in date'); return; }
   if (S.accommodation && !S.form.checkoutDate) { showToast(lang==='ko'?'체크아웃 날짜를 선택해주세요':'Please select check-out date'); return; }
