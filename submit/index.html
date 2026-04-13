@@ -660,7 +660,7 @@ function renderPersonal(app) {
       <input class="field-input" id="f-email2" value="${esc(f.email2)}" type="email">
       <label class="field-label">${lang==='ko'?'특이식단':'Dietary Requirement'}</label>
       <div class="radio-group">
-        ${['none','vegetarian','halal'].map(o=>'<div class="radio-item '+(f.dietSelf===o?'sel':'')+'" onclick="S.form.dietSelf=\''+o+'\';render()">'+t(o)+'</div>').join('')}
+        ${['none','vegetarian','halal'].map(o=>'<div class="radio-item '+(f.dietSelf===o?'sel':'')+'" onclick="syncPersonalInputs();S.form.dietSelf=\''+o+'\';render()">'+t(o)+'</div>').join('')}
       </div>
       ${isDomesticSpeaker() ? `
       <div style="margin-top:24px;padding-top:20px;border-top:1px solid #E5E5EA;">
@@ -682,6 +682,26 @@ function renderPersonal(app) {
     </div>`;
 }
 function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+// DOM 입력값을 S.form에 sync (라디오 클릭으로 re-render 전에 호출해 입력 손실 방지)
+function syncPersonalInputs() {
+  if (g('f-country')) S.form.country = g('f-country').value.trim();
+  if (g('f-title')) S.form.title = g('f-title').value;
+  if (g('f-fn')) S.form.firstName = g('f-fn').value.trim();
+  if (g('f-ln')) S.form.lastName = g('f-ln').value.trim();
+  if (g('f-mn')) S.form.middleName = g('f-mn').value.trim();
+  if (g('f-nameKr')) S.form.nameKr = g('f-nameKr').value.trim();
+  if (g('f-affil')) S.form.affiliation = g('f-affil').value.trim();
+  if (g('f-affilEn')) S.form.affiliationEn = g('f-affilEn').value.trim();
+  if (g('f-dept')) S.form.department = g('f-dept').value.trim();
+  if (g('f-lic')) S.form.licenseNo = g('f-lic').value.trim();
+  if (g('f-addr')) S.form.address = g('f-addr').value.trim();
+  if (g('f-mobile')) S.form.mobile = g('f-mobile').value.trim();
+  if (g('f-email2')) S.form.email2 = g('f-email2').value.trim();
+  if (g('f-rid')) S.form.residentId = g('f-rid').value.trim();
+  if (g('f-bank')) S.form.bankName = g('f-bank').value.trim();
+  if (g('f-acct')) S.form.accountNumber = g('f-acct').value.trim();
+  if (g('f-holder')) S.form.accountHolder = g('f-holder').value.trim();
+}
 function isDomesticSpeaker() {
   var c = (S.form.country || S.country || '').toString().trim();
   return c === 'Korea' || c === '대한민국' || c === 'KR' || c === 'KOR';
