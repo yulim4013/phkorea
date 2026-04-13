@@ -452,10 +452,20 @@ function dateRange(start, end) {
 
 // ── 메인 렌더 ──
 function render() {
-  renderStepBar();
+  try {
+    renderStepBar();
+  } catch(e) { console.error('renderStepBar error:', e); }
   const app = g('app');
   const view = STEPS[step];
 
+  try {
+    _dispatchRender(view, app);
+  } catch(err) {
+    console.error('Render error for view ' + view + ':', err);
+    app.innerHTML = '<div style="padding:20px;color:#EF4444;"><h3>렌더링 오류</h3><p>' + (err.message||'') + '</p><button onclick="step=STEPS.indexOf(\'dashboard\');render()">대시보드로</button></div>';
+  }
+}
+function _dispatchRender(view, app) {
   if (view === 'verify') renderVerify(app);
   else if (view === 'dashboard') renderDashboard(app);
   else if (view === 'personal') renderPersonal(app);
@@ -465,6 +475,7 @@ function render() {
   else if (view === 'events') renderEvents(app);
   else if (view === 'done') renderDone(app);
 }
+// v2026-04-13-r2 (cache-bust)
 
 // ── Step: Verify ──
 function renderVerify(app) {
