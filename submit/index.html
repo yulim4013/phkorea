@@ -267,10 +267,10 @@
 const GAS_URL = "https://script.google.com/macros/s/AKfycbxDcTi1zG65jDI0jfq0g8Hu_oFTUN-8l6fqf6vQEWjsFBbL_h53TfjKbzwYlYV64Q/exec";
 
 // ── 스텝 정의 ──
-const STEPS = ["verify","dashboard","personal","accommodation","introduction","cv","files","events","done"];
+const STEPS = ["verify","dashboard","personal","accommodation","cv","files","events","done"];
 const STEP_NAMES = {
-  ko: ["확인","대시보드","인적정보","숙박","소개","CV","파일","행사","완료"],
-  en: ["Verify","Dashboard","Info","Stay","Intro","CV","Files","Events","Done"]
+  ko: ["확인","대시보드","인적정보","숙박","CV","파일","행사","완료"],
+  en: ["Verify","Dashboard","Info","Stay","CV","Files","Events","Done"]
 };
 
 // ── 다국어 ──
@@ -457,7 +457,6 @@ function render() {
   else if (view === 'dashboard') renderDashboard(app);
   else if (view === 'personal') renderPersonal(app);
   else if (view === 'accommodation') renderAccommodation(app);
-  else if (view === 'introduction') renderIntroduction(app);
   else if (view === 'cv') renderCV(app);
   else if (view === 'files') renderFiles(app);
   else if (view === 'events') renderEvents(app);
@@ -538,13 +537,11 @@ function renderDashboard(app) {
     items.push({ label: lang==='ko'?'숙박 일정':'Accommodation', step: 'accommodation', done: accomDone, expired: sec.accommodation.expired });
   }
 
-  // 3. 간단 소개
-  var introDone = !!(S.form.introduction && S.form.introduction.trim());
-  items.push({ label: lang==='ko'?'간단 소개':'Introduction', step: 'introduction', done: introDone, expired: sec.replyForm && sec.replyForm.expired });
-
-  // 4. CV
-  var cvDone = !!(S.form.education || S.form.career || S.form.research || S.form.papers);
-  items.push({ label: 'CV', step: 'cv', done: cvDone, expired: sec.cv && sec.cv.expired });
+  // 3. CV (대상일 때만 표시)
+  if (sec.cv && sec.cv.target) {
+    var cvDone = !!(S.form.education || S.form.career || S.form.research || S.form.papers);
+    items.push({ label: 'CV', step: 'cv', done: cvDone, expired: sec.cv.expired });
+  }
 
   // 5. 서류 제출 (모든 필수 파일이 제출되면 완료)
   var fileKeys = ['abstract', 'photo', 'passport', 'taxcert'];
