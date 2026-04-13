@@ -963,11 +963,17 @@ async function submitAll() {
   showOverlay(true);
   try {
     // 파일 base64 변환 병렬 처리
-    const fileEntries = Object.entries(S.files).filter(([_, f]) => !!f);
-    const filePayloads = {};
-    await Promise.all(fileEntries.map(async ([key, file]) => {
-      const b64 = await fileToBase64(file);
-      filePayloads[key] = { name: file.name, type: file.type, data: b64 };
+    var fileEntries = [];
+    var fileKeysAll = Object.keys(S.files);
+    for (var fki = 0; fki < fileKeysAll.length; fki++) {
+      var fk = fileKeysAll[fki];
+      if (S.files[fk]) fileEntries.push({ key: fk, file: S.files[fk] });
+    }
+    var filePayloads = {};
+    await Promise.all(fileEntries.map(function(fe) {
+      return fileToBase64(fe.file).then(function(b64) {
+        filePayloads[fe.key] = { name: fe.file.name, type: fe.file.type, data: b64 };
+      });
     }));
     const payload = {
       email: S.email,
