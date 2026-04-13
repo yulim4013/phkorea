@@ -243,8 +243,8 @@
 <div class="wrap">
   <div class="top-bar" id="top-bar">PH Korea 2026</div>
 
-  <!-- 언어 전환 -->
-  <div class="lang-wrap">
+  <!-- 언어 전환 (이메일 인증 전에만 표시) -->
+  <div class="lang-wrap" id="lang-wrap">
     <button class="lang-btn active" id="lang-ko" onclick="setLang('ko')">한국어</button>
     <button class="lang-btn" id="lang-en" onclick="setLang('en')">English</button>
   </div>
@@ -490,6 +490,13 @@ function renderVerify(app) {
         S.name = json.name || '';
         S.affiliation = json.affiliation || '';
         S.country = json.country || '';
+        // 국가 기준 언어 자동 잠금: Korea면 한국어 고정, 그 외(빈 값 포함)는 영어 고정
+        var c = (S.country || '').toString().trim();
+        var forceLang = (c === 'Korea' || c === '대한민국' || c === 'KR' || c === 'KOR') ? 'ko' : 'en';
+        setLang(forceLang);
+        // 언어 토글 숨김
+        var lw = g('lang-wrap');
+        if (lw) lw.style.display = 'none';
         S.required = json.required || {};
         S.sections = json.sections || {};
         S.submitted = json.submitted || {};
@@ -955,12 +962,13 @@ function renderDone(app) {
 async function submitAll() {
   showOverlay(true);
   try {
+    // 파일 base64 변환 병렬 처리
+    const fileEntries = Object.entries(S.files).filter(([_, f]) => !!f);
     const filePayloads = {};
-    for (const [key, file] of Object.entries(S.files)) {
-      if (!file) continue;
+    await Promise.all(fileEntries.map(async ([key, file]) => {
       const b64 = await fileToBase64(file);
       filePayloads[key] = { name: file.name, type: file.type, data: b64 };
-    }
+    }));
     const payload = {
       email: S.email,
       name: S.name,
