@@ -1041,7 +1041,10 @@ function goToStep(name) {
 }
 
 // ── 이스케이프 ──
-function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function esc(s) {
+  if (s === null || s === undefined) return '';
+  return s.toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
 // ── 초기 렌더 ──
 render();
