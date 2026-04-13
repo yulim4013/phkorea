@@ -676,32 +676,32 @@ function renderAccommodation(app) {
   const sec = S.sections && S.sections.accommodation;
   if (!sec || !sec.target) { goToDashboard(); return; }
   const accom = S.accommodation;
-  if (!accom) {
+  if (!accom || !accom.rangeStart || !accom.nights) {
     app.innerHTML = '<div class="card"><div class="card-title">' + t('accomTitle') + '</div><div class="card-sub">' + (lang==='ko'?'숙박 조건이 아직 설정되지 않았습니다. 사무국에 문의해주세요.':'Accommodation details have not been set. Please contact the secretariat.') + '</div></div><div class="btn-row"><button class="btn-back" onclick="goToDashboard()">' + t('back') + '</button></div>';
     return;
   }
-  if (!accom.rangeStart || !accom.rangeEnd) {
-    app.innerHTML = '<div class="card"><div class="card-title">' + t('accomTitle') + '</div><div class="card-sub">' + (lang==='ko'?'숙박 가능 날짜 범위가 설정되지 않았습니다. 사무국에 문의해주세요.':'Accommodation date range is not set. Please contact the secretariat.') + '</div></div><div class="btn-row"><button class="btn-back" onclick="goToDashboard()">' + t('back') + '</button></div>';
-    return;
-  }
 
-  const dates = dateRange(accom.rangeStart, accom.rangeEnd);
   const f = S.form;
+  // 체크인 범위: rangeStart ~ rangeStart + 6일 (여유)
+  const startDate = new Date(accom.rangeStart);
+  const checkinEnd = new Date(startDate); checkinEnd.setDate(checkinEnd.getDate() + 6);
+  const checkinDates = dateRange(startDate, checkinEnd);
 
   let checkinGrid = `<label class="field-label">${t('checkin')}</label><div class="date-grid">`;
-  for (const d of dates) {
+  for (const d of checkinDates) {
     const info = formatDateShort(d);
     const sel = f.checkinDate === info.iso ? 'sel' : '';
     checkinGrid += `<div class="date-cell ${sel}" onclick="selectCheckin('${info.iso}')"><div>${info.label}</div><div class="dw">${info.dw}</div></div>`;
   }
   checkinGrid += '</div>';
 
-  // 체크아웃: 체크인 다음날 ~ 범위 끝
+  // 체크아웃 범위: 체크인 다음날 ~ 체크인 + 제공박수 + 3일 (초과 선택 가능, 팝업으로 안내)
   let checkoutGrid = '';
   if (f.checkinDate) {
     const ciDate = new Date(f.checkinDate);
     const nextDay = new Date(ciDate); nextDay.setDate(nextDay.getDate()+1);
-    const coDates = dateRange(nextDay, accom.rangeEnd);
+    const coEnd = new Date(ciDate); coEnd.setDate(coEnd.getDate() + accom.nights + 3);
+    const coDates = dateRange(nextDay, coEnd);
     checkoutGrid = `<label class="field-label" style="margin-top:16px">${t('checkout')}</label><div class="date-grid">`;
     for (const d of coDates) {
       const info = formatDateShort(d);
