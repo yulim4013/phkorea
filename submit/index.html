@@ -925,7 +925,7 @@ function renderFiles(app) {
 
     html += `<div class="file-row">
       <label class="field-label">${t(key+'Label')}</label>
-      <div class="${boxClass}" id="${key}-box" onclick="g('${key}-input').click()">
+      <div class="${boxClass}" id="${key}-box" onclick="if(event.target.closest('.btn-preview'))return;g('${key}-input').click()">
         <div class="fi">${cfg.icon}</div>
         <div class="fl">${labelText}</div>
         <div class="fh">${t(key+'Hint')} · ${t('fileMax')} ${cfg.maxMB}MB</div>
