@@ -237,6 +237,16 @@
     /* ── toast ── */
     .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #1C1C1E; color: #fff; padding: 12px 20px; border-radius: 20px; font-size: 14px; opacity: 0; transition: all .3s; pointer-events: none; white-space: nowrap; z-index: 200; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── preview modal ── */
+    .btn-preview { display: inline-block; margin-top: 10px; padding: 7px 14px; background: #1a73e8; color: #fff; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 500; }
+    .btn-preview:hover { background: #1557b0; }
+    .preview-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.65); z-index: 9999; align-items: center; justify-content: center; }
+    .preview-modal.open { display: flex; }
+    .preview-inner { background: #fff; width: 92%; max-width: 900px; height: 85vh; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; }
+    .preview-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; border-bottom: 1px solid #eee; font-size: 14px; font-weight: 600; }
+    .preview-header button { background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 0; line-height: 1; }
+    .preview-frame { flex: 1; border: 0; }
   </style>
 </head>
 <body>
@@ -920,6 +930,7 @@ function renderFiles(app) {
         <div class="fl">${labelText}</div>
         <div class="fh">${t(key+'Hint')} · ${t('fileMax')} ${cfg.maxMB}MB</div>
         <div class="fn">${nameText}</div>${prevHTML}
+        ${hasPrev && sub.id ? `<button type="button" class="btn-preview" onclick="event.stopPropagation();previewFile('${sub.id}', ${JSON.stringify(sub.name)})">${lang==='ko'?'👁 제출 파일 보기':'👁 View Submitted'}</button>` : ''}
         <input type="file" id="${key}-input" accept="${cfg.accept}">
       </div></div>`;
   }
@@ -1048,6 +1059,34 @@ function esc(s) {
 
 // ── 초기 렌더 ──
 render();
+
+// ── 파일 미리보기 모달 ──
+function previewFile(id, name) {
+  if (!id) return;
+  var t = document.getElementById('preview-title');
+  var f = document.getElementById('preview-frame');
+  var m = document.getElementById('preview-modal');
+  if (t) t.textContent = name || '';
+  if (f) f.src = 'https://drive.google.com/file/d/' + id + '/preview';
+  if (m) m.classList.add('open');
+}
+function closePreview(e) {
+  if (e && e.target && e.target.id !== 'preview-modal' && e.target.tagName !== 'BUTTON') return;
+  var f = document.getElementById('preview-frame');
+  var m = document.getElementById('preview-modal');
+  if (m) m.classList.remove('open');
+  if (f) f.src = '';
+}
 </script>
+
+<div id="preview-modal" class="preview-modal" onclick="closePreview(event)">
+  <div class="preview-inner" onclick="event.stopPropagation()">
+    <div class="preview-header">
+      <span id="preview-title"></span>
+      <button type="button" onclick="closePreview()">×</button>
+    </div>
+    <iframe id="preview-frame" class="preview-frame" src=""></iframe>
+  </div>
+</div>
 </body>
 </html>
