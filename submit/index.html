@@ -930,7 +930,7 @@ function renderFiles(app) {
         <div class="fl">${labelText}</div>
         <div class="fh">${t(key+'Hint')} · ${t('fileMax')} ${cfg.maxMB}MB</div>
         <div class="fn">${nameText}</div>${prevHTML}
-        ${hasPrev && sub.id ? `<button type="button" class="btn-preview" onclick="event.stopPropagation();previewFile('${sub.id}', ${JSON.stringify(sub.name)})">${lang==='ko'?'👁 제출 파일 보기':'👁 View Submitted'}</button>` : ''}
+        ${hasPrev && sub.id ? `<button type="button" class="btn-preview" onclick="return previewFileBtn(event, '${sub.id}', ${JSON.stringify(sub.name)})">${lang==='ko'?'👁 제출 파일 보기':'👁 View Submitted'}</button>` : ''}
         <input type="file" id="${key}-input" accept="${cfg.accept}">
       </div></div>`;
   }
@@ -1061,6 +1061,14 @@ function esc(s) {
 render();
 
 // ── 파일 미리보기 모달 ──
+function previewFileBtn(ev, id, name) {
+  if (ev) {
+    if (ev.stopPropagation) ev.stopPropagation();
+    if (ev.preventDefault) ev.preventDefault();
+  }
+  previewFile(id, name);
+  return false;
+}
 function previewFile(id, name) {
   if (!id) return;
   var t = document.getElementById('preview-title');
